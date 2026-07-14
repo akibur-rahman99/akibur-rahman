@@ -46,8 +46,16 @@ a{color:inherit; text-decoration:none}
 .brand-text{font-weight:700}
 
 .nav-links{display:flex; gap:18px; align-items:center}
-.nav-links a{color:var(--muted); font-weight:600; font-size:14px}
+.nav-links a{color:var(--muted); font-weight:600; font-size:14px; position:relative}
 .nav-links a:hover{color:var(--text)}
+.nav-links a.active:not(.btn){color:var(--text)}
+.nav-links a.active:not(.btn)::after{
+  content:"";
+  position:absolute; left:0; right:0; bottom:-8px;
+  height:2px; border-radius:2px;
+  background:linear-gradient(135deg,var(--accent),var(--accent2));
+}
+.nav-links a.btn.active{box-shadow:0 0 0 3px rgba(31,157,138,.25), 0 18px 40px rgba(31,157,138,.20)}
 .btn{
   display:inline-flex; align-items:center; justify-content:center;
   padding:10px 14px;
@@ -84,6 +92,7 @@ a{color:inherit; text-decoration:none}
   gap:34px;
   align-items:center;
 }
+.hero-left{min-width:0}
 .chip{
   display:inline-flex;
   padding:8px 12px;
@@ -166,6 +175,16 @@ a{color:inherit; text-decoration:none}
 }
 .b1{width:340px; height:340px; background:rgba(31,157,138,.55); left:-140px; top:-140px}
 .b2{width:300px; height:300px; background:rgba(22,111,99,.45); right:-120px; top:20px}
+
+/* Sub-page header (About/Skills/Projects/etc.) */
+.page-head{padding:44px 0 8px}
+.page-eyebrow{
+  display:inline-flex; padding:8px 12px; border-radius:999px;
+  border:1px solid rgba(31,157,138,.35); background:rgba(255,255,255,.55);
+  color:var(--muted); font-weight:700; font-size:12px; width:max-content;
+}
+.page-title{font-size: clamp(30px, 3.6vw, 44px); line-height:1.1; margin:14px 0 8px}
+.page-sub{margin:0; color:var(--muted); font-size:15px; line-height:1.6; max-width:64ch}
 
 /* Sections */
 .section{padding:44px 0}
@@ -254,6 +273,58 @@ a{color:inherit; text-decoration:none}
 .footer-links{display:flex; gap:14px}
 .footer-links a:hover{color:var(--text)}
 
+/* Quick links (Home page) */
+.quick-card{
+  display:flex; flex-direction:column; gap:6px;
+  transition: transform .15s ease, border-color .15s ease;
+}
+.quick-card:hover{transform: translateY(-4px); border-color:rgba(31,157,138,.35)}
+.quick-card .card-title{display:flex; align-items:center; justify-content:space-between; gap:10px}
+.quick-arrow{color:var(--accent2); font-weight:900}
+
+/* Video introduction */
+.video-box{
+  position:relative;
+  aspect-ratio:16/9;
+  border-radius:var(--radius);
+  border:1.5px dashed rgba(31,157,138,.35);
+  background:rgba(31,157,138,.06);
+  display:grid; place-items:center;
+  text-align:center;
+  padding:20px;
+  overflow:hidden;
+}
+.video-box video{width:100%; height:100%; object-fit:cover; border-radius:calc(var(--radius) - 2px)}
+.video-icon{
+  width:56px; height:56px; border-radius:999px;
+  background:linear-gradient(135deg,var(--accent),var(--accent2));
+  color:#fff; display:grid; place-items:center;
+  margin:0 auto 12px;
+  box-shadow:0 12px 30px rgba(31,157,138,.25);
+}
+.video-box-title{font-weight:800; margin:0}
+.video-box-sub{color:var(--muted); font-size:13px; margin:6px 0 0}
+
+/* Resume */
+.resume-head{
+  display:flex; align-items:center; gap:16px; flex-wrap:wrap;
+  justify-content:space-between;
+}
+.resume-id{display:flex; align-items:center; gap:14px}
+.resume-avatar{
+  width:64px; height:64px; border-radius:16px; object-fit:cover;
+  border:1px solid var(--stroke); box-shadow:var(--shadow);
+}
+.resume-name{margin:0; font-size:20px}
+.resume-role{margin:4px 0 0; color:var(--muted); font-weight:700; font-size:13px}
+.resume-contact{display:flex; flex-wrap:wrap; gap:10px; margin-top:14px}
+.resume-contact a.pill{color:var(--accent2)}
+.resume-block{margin-top:16px}
+.resume-block-title{font-size:13px; letter-spacing:.04em; text-transform:uppercase; color:var(--accent2); font-weight:800; margin:0 0 10px}
+.resume-ref{padding:12px; border-radius:14px; border:1px solid var(--stroke); background:rgba(255,255,255,.55)}
+.resume-ref-name{font-weight:800}
+.resume-ref-role{color:var(--muted); font-size:13px; margin-top:4px}
+
 /* Mobile */
 @media (max-width: 900px){
   .hero-grid{grid-template-columns:1fr; gap:22px}
@@ -273,4 +344,6 @@ a{color:inherit; text-decoration:none}
     padding:14px 0;
   }
   .nav-links.open{display:flex}
+  .resume-head{flex-direction:column; align-items:flex-start}
+  .section-head{flex-direction:column; align-items:flex-start; gap:6px}
 }

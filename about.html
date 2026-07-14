@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>About | Akibur Rahman</title>
+  <meta name="description" content="About Akibur Rahman — background, key attributes, and video introduction." />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="./style.css" />
+</head>
+<body data-page="about">
+  <header class="nav">
+    <div class="container nav-inner">
+      <a class="brand" href="index.html" aria-label="Home">
+        <span class="brand-mark">AR</span>
+        <span class="brand-text">Akibur Rahman</span>
+      </a>
+
+      <button class="nav-toggle" aria-label="Open menu" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+
+      <nav class="nav-links" aria-label="Primary">
+        <a href="about.html" data-page="about">About</a>
+        <a href="skills.html" data-page="skills">Skills</a>
+        <a href="projects.html" data-page="projects">Projects</a>
+        <a href="education.html" data-page="education">Education</a>
+        <a href="achievements.html" data-page="achievements">Achievements</a>
+        <a href="resume.html" data-page="resume">Resume</a>
+        <a href="contact.html" class="btn" data-page="contact">Contact</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <div class="container page-head">
+      <p class="page-eyebrow">About</p>
+      <h1 class="page-title">A bit about me</h1>
+      <p class="page-sub">My background, what drives me, and a short video introduction.</p>
+    </div>
+
+    <section class="section" style="padding-top:10px">
+      <div class="container">
+        <div class="card grid-2">
+          <div>
+            <p class="p">
+              My name is <strong>Akibur Rahman</strong>. From childhood, I’ve been curious about technology and science.
+              I enjoy gaming, exploring new ideas, and turning concepts into real projects.
+            </p>
+            <p class="p">
+              My goal is to become a <strong>game developer</strong> and launch my own gaming company by <strong>2030</strong>.
+              After that, I hope to research topics like <strong>space</strong> and <strong>deep sea</strong>.
+            </p>
+
+            <div class="pill-row">
+              <span class="pill">Fast learner</span>
+              <span class="pill">Disciplined</span>
+              <span class="pill">Team leader</span>
+              <span class="pill">Problem solver</span>
+            </div>
+          </div>
+          <div class="mini-cards">
+            <div class="mini">
+              <div class="mini-k">Phone</div>
+              <div class="mini-v"><a href="tel:+8801581460211">+8801581460211</a></div>
+            </div>
+            <div class="mini">
+              <div class="mini-k">Date of Birth</div>
+              <div class="mini-v">23 Apr 2003</div>
+            </div>
+            <div class="mini">
+              <div class="mini-k">Status</div>
+              <div class="mini-v">Single</div>
+            </div>
+            <div class="mini">
+              <div class="mini-k">Interest</div>
+              <div class="mini-v">Tech • Business • Space • Deep Sea</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="video-intro" class="section" style="padding-top:0">
+      <div class="container">
+        <h2 class="section-title">Video Introduction</h2>
+        <div class="card">
+          <video controls playsinline class="video-box" style="border:1px solid var(--stroke)">
+            <source src="./assets/video/intro.mp4" type="video/mp4" />
+          </video>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="container footer-inner">
+      <div>© <span id="year"></span> Akibur Rahman</div>
+      <div class="footer-links">
+        <a href="index.html">Top</a>
+        <a href="projects.html">Projects</a>
+        <a href="contact.html">Contact</a>
+      </div>
+    </div>
+  </footer>
+
+  <script src="./script.js"></script>
+</body>
+</html>

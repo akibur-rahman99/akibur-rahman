@@ -18,3 +18,11 @@ document.querySelectorAll('.nav-links a').forEach(a => {
 
 // Footer year
 document.getElementById('year').textContent = new Date().getFullYear();
+
+// Highlight the current page in the nav
+const currentPage = document.body.dataset.page;
+if (currentPage) {
+  document.querySelectorAll('.nav-links a[data-page]').forEach(a => {
+    if (a.dataset.page === currentPage) a.classList.add('active');
+  });
+}
