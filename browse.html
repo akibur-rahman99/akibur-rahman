@@ -10,6 +10,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="./style.css" />
+  <script>document.documentElement.classList.add('js')</script>
 </head>
 <body data-page="browse">
   <header class="nav">
@@ -40,9 +41,9 @@
 
   <main>
     <section class="billboard" aria-label="Featured">
-      <img class="billboard-photo" src="./assets/profile-cutout.webp" alt="Akibur Rahman" width="900" height="1441" />
+      <img class="billboard-photo" src="./assets/profile-cutout.webp?v=2" alt="Akibur Rahman" width="900" height="1441" />
       <div class="billboard-body">
-        <h1 class="billboard-title">Akibur<br />Rahman</h1>
+        <h1 class="billboard-title"><span class="ln">Akibur</span><br /><span class="ln">Rahman</span></h1>
         <div class="billboard-meta">
           <span class="meta-strong">CSE · Cyber security</span>
           <span class="meta-muted">AIUB</span>
@@ -50,8 +51,8 @@
         </div>
         <p class="billboard-sub">
           CSE student at AIUB with a cyber security major. I'm learning how systems
-          <span class="redact">break</span> and how to
-          <span class="redact" style="--d:.9s">keep them safe</span>.
+          <span class="redact" style="--d:1.7s">break</span> and how to
+          <span class="redact" style="--d:2.1s">keep them safe</span>.
         </p>
         <div class="billboard-cta">
           <a class="btn btn-play" href="projects.html" data-cta><span class="icon-play" aria-hidden="true"></span><span class="cta-label">Projects</span></a>
@@ -149,17 +150,17 @@
         <div class="tile info" style="--g1:#8a0b16; --g2:#1a0a0c">
           <div class="tile-title">AIUB</div>
           <div class="tile-list"><div>BSc in CSE, cyber security major</div><div>CGPA 3.50 / 4.00</div></div>
-          <div class="progress" role="img" aria-label="CGPA 3.50 out of 4.00"><span style="width:87.5%"></span></div>
+          <div class="progress" role="img" aria-label="CGPA 3.50 out of 4.00"><span style="--w:87.5%"></span></div>
         </div>
         <div class="tile info" style="--g1:#32415a; --g2:#11151c">
           <div class="tile-title">Cambrian College</div>
           <div class="tile-list"><div>HSC, Science · 2022</div><div>Result: A+</div></div>
-          <div class="progress" role="img" aria-label="Completed"><span style="width:100%"></span></div>
+          <div class="progress" role="img" aria-label="Completed"><span style="--w:100%"></span></div>
         </div>
         <div class="tile info" style="--g1:#561327; --g2:#160a10">
           <div class="tile-title">National Ideal School</div>
           <div class="tile-list"><div>SSC, Science · 2020</div></div>
-          <div class="progress" role="img" aria-label="Completed"><span style="width:100%"></span></div>
+          <div class="progress" role="img" aria-label="Completed"><span style="--w:100%"></span></div>
         </div>
       </div>
     </section>

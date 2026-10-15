@@ -10,6 +10,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="./style.css" />
+  <script>document.documentElement.classList.add('js')</script>
 </head>
 <body data-page="contact">
   <header class="nav">
@@ -45,7 +46,105 @@
     </div>
 
     <section class="section">
-      <div class="container">
+      <div class="container contact-grid">
+        <div class="avatar-stage" aria-hidden="false">
+          <div class="avatar-glow"></div>
+          <div class="avatar-bubble" role="status" aria-live="polite">Hey, caught you!</div>
+          <svg class="avatar-svg" viewBox="0 0 400 480" role="img" aria-label="Illustrated avatar of Akibur that follows your cursor" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <clipPath id="av-blazer-clip"><path d="M24 480C24 414 66 386 138 372L262 372C334 386 376 414 376 480Z"/></clipPath>
+    <clipPath id="av-face-clip"><path d="M200 80C132 80 112 134 114 202C116 268 148 312 200 312C252 312 284 268 286 202C288 134 268 80 200 80Z"/></clipPath>
+    <linearGradient id="av-skin" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#d9a07a"/><stop offset="1" stop-color="#cf9470"/></linearGradient>
+    <radialGradient id="av-stubble" cx="50%" cy="38%" r="62%"><stop offset=".55" stop-color="#2a1d1a" stop-opacity="0"/><stop offset="1" stop-color="#2a1d1a" stop-opacity=".34"/></radialGradient>
+    <linearGradient id="av-hair" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#2a303d"/><stop offset="1" stop-color="#14181f"/></linearGradient>
+  </defs>
+
+  <!-- body: blazer, shirt, plaid -->
+  <g id="av-body">
+    <path d="M24 480C24 414 66 386 138 372L262 372C334 386 376 414 376 480Z" fill="#a31d2d"/>
+    <g clip-path="url(#av-blazer-clip)" stroke="#3a0c16" stroke-width="5" opacity=".75" fill="none">
+      <path d="M70 372V480M112 372V480M288 372V480M330 372V480"/>
+      <path d="M0 410H400M0 446H400"/>
+    </g>
+    <path d="M150 372L250 372L268 480L132 480Z" fill="#1c1a29"/>
+    <path d="M150 372L200 440L132 480L112 400Z" fill="#8a1625"/>
+    <path d="M250 372L200 440L268 480L288 400Z" fill="#8a1625"/>
+    <path d="M150 372L200 440M250 372L200 440" stroke="#3a0c16" stroke-width="3" fill="none"/>
+    <!-- neck + turtleneck -->
+    <path d="M158 322L242 322L248 376L152 376Z" fill="#c68663"/>
+    <path d="M154 344C154 332 246 332 246 344L254 390C234 404 166 404 146 390Z" fill="#1c1a29"/>
+    <path d="M154 346C178 358 222 358 246 346" stroke="#2c2840" stroke-width="3" fill="none"/>
+  </g>
+
+  <!-- head -->
+  <g id="av-head">
+    <!-- ears -->
+    <ellipse cx="114" cy="216" rx="14" ry="22" fill="#c98d68"/>
+    <ellipse cx="286" cy="216" rx="14" ry="22" fill="#c98d68"/>
+    <ellipse cx="114" cy="218" rx="6" ry="12" fill="#b57855"/>
+    <ellipse cx="286" cy="218" rx="6" ry="12" fill="#b57855"/>
+    <!-- face -->
+    <path d="M200 80C132 80 112 134 114 202C116 268 148 312 200 312C252 312 284 268 286 202C288 134 268 80 200 80Z" fill="url(#av-skin)"/>
+    <g clip-path="url(#av-face-clip)">
+      <rect x="110" y="60" width="180" height="260" fill="url(#av-stubble)"/>
+      <ellipse cx="150" cy="248" rx="22" ry="12" fill="#e08a78" opacity=".16"/>
+      <ellipse cx="250" cy="248" rx="22" ry="12" fill="#e08a78" opacity=".16"/>
+    </g>
+
+    <!-- hair sits behind the glasses -->
+    <g id="av-hair">
+      <path d="M106 218C86 130 122 50 204 48C286 46 322 128 294 218C292 182 284 152 264 134C250 154 214 160 176 148C162 156 154 166 150 180C144 190 132 208 106 218Z" fill="url(#av-hair)"/>
+      <path d="M128 130C146 90 190 66 240 74C268 80 286 104 292 140" stroke="#3a4152" stroke-width="5" stroke-linecap="round" fill="none" opacity=".65"/>
+      <path d="M150 112C178 88 224 84 258 106" stroke="#4a5266" stroke-width="3" stroke-linecap="round" fill="none" opacity=".55"/>
+      <path d="M118 176C122 150 134 128 152 116" stroke="#3a4152" stroke-width="3" stroke-linecap="round" fill="none" opacity=".5"/>
+      <path d="M176 148C200 160 240 154 264 134" stroke="#0b0e13" stroke-width="3.5" stroke-linecap="round" fill="none" opacity=".7"/>
+      <path d="M270 110C284 124 290 150 290 176" stroke="#3a4152" stroke-width="3" stroke-linecap="round" fill="none" opacity=".45"/>
+    </g>
+
+    <!-- features move a bit more than the outline, so the head seems to turn -->
+    <g id="av-feat">
+      <!-- eyebrows -->
+      <path d="M134 174C148 164 172 164 188 172" stroke="#241a1a" stroke-width="7" stroke-linecap="round" fill="none"/>
+      <path d="M212 172C228 164 252 164 266 174" stroke="#241a1a" stroke-width="7" stroke-linecap="round" fill="none"/>
+      <!-- eyes -->
+      <g id="av-eyes">
+        <ellipse cx="160" cy="203" rx="16" ry="9.5" fill="#f4ece6"/>
+        <ellipse cx="240" cy="203" rx="16" ry="9.5" fill="#f4ece6"/>
+        <circle id="av-pupil-l" cx="160" cy="203" r="6.4" fill="#2a1912"/>
+        <circle id="av-pupil-r" cx="240" cy="203" r="6.4" fill="#2a1912"/>
+        <circle id="av-shine-l" cx="162.5" cy="200.5" r="1.8" fill="#fff"/>
+        <circle id="av-shine-r" cx="242.5" cy="200.5" r="1.8" fill="#fff"/>
+        <g class="av-lids">
+          <rect class="av-lid" x="143" y="192" width="34" height="22" rx="10" fill="#d49a74"/>
+          <rect class="av-lid" x="223" y="192" width="34" height="22" rx="10" fill="#d49a74"/>
+        </g>
+      </g>
+      <!-- glasses -->
+      <g fill="rgba(255,255,255,.07)" stroke="#17131c" stroke-width="5.5" stroke-linejoin="round">
+        <rect x="124" y="179" width="74" height="48" rx="11"/>
+        <rect x="202" y="179" width="74" height="48" rx="11"/>
+      </g>
+      <path d="M196 194H204" stroke="#17131c" stroke-width="6" stroke-linecap="round"/>
+      <path d="M124 192L112 190M276 192L288 190" stroke="#17131c" stroke-width="6" stroke-linecap="round"/>
+      <path d="M136 188L154 185" stroke="#fff" stroke-opacity=".5" stroke-width="3" stroke-linecap="round"/>
+      <path d="M214 188L232 185" stroke="#fff" stroke-opacity=".5" stroke-width="3" stroke-linecap="round"/>
+      <!-- nose -->
+      <path d="M200 216C196 234 190 245 196 252C202 256 211 255 214 249" stroke="#a9694a" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+      <path d="M187 253C192 258 208 258 213 253" stroke="#a9694a" stroke-width="3" stroke-linecap="round" fill="none"/>
+      <!-- moustache, mouth, goatee -->
+      <path d="M164 272C180 259 194 265 200 269C206 265 220 259 236 272C220 280 206 276 200 278C194 276 180 280 164 272Z" fill="#33262a"/>
+      <path d="M178 288Q200 303 222 288" stroke="#7c3d33" stroke-width="4" stroke-linecap="round" fill="none"/>
+      <path d="M186 290Q200 300 214 290" fill="#c4705f" opacity=".0"/>
+      <path d="M170 298C186 313 214 313 230 298C228 317 214 327 200 327C186 327 172 317 170 298Z" fill="#33262a" opacity=".4"/>
+    </g>
+
+    <!-- hair: swept fringe, thick sides -->
+
+  </g>
+</svg>
+
+          <p class="avatar-hint">Move your mouse around</p>
+        </div>
         <ul class="links">
           <li><a href="mailto:akibrr239@gmail.com">Email <span>akibrr239@gmail.com</span></a></li>
           <li><a href="https://www.linkedin.com/in/akibur-rahman-51aa00388" target="_blank" rel="noreferrer">LinkedIn <span>akibur-rahman-51aa00388</span></a></li>

@@ -10,6 +10,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="./style.css" />
+  <script>document.documentElement.classList.add('js')</script>
 </head>
 <body data-page="about">
   <header class="nav">
@@ -43,6 +44,48 @@
       <h1 class="page-title">About me</h1>
       <p class="page-sub">Who I am and what I'm working toward.</p>
     </div>
+
+    <section class="section ring-section" aria-label="360 degree view">
+      <div class="container">
+        <div class="section-head">
+          <h2 class="section-title">360° view</h2>
+          <span class="muted">Drag to spin, or use the arrows</span>
+        </div>
+        <div class="ring-scene" tabindex="0" role="group" aria-roledescription="carousel" aria-label="360 degree view. Use left and right arrow keys to rotate.">
+          <div class="ring">
+          <div class="ring-panel" data-label="Akibur Rahman" style="--i:0">
+            <img class="ring-photo" src="./assets/profile-cutout.webp?v=2" alt="Akibur Rahman" width="900" height="1441" loading="lazy" />
+            <div class="ring-tag"><div class="ring-title">Akibur Rahman</div><div class="ring-text">CSE · Cyber security</div></div>
+          </div>
+          <div class="ring-panel" data-label="Cyber security" style="--i:1">
+            <div class="ring-num" aria-hidden="true">01</div>
+            <div class="ring-tag"><div class="ring-title">Cyber security</div><div class="ring-text">My major at AIUB. I'm learning how systems break and how to keep them safe.</div></div>
+          </div>
+          <div class="ring-panel" data-label="Education" style="--i:2">
+            <div class="ring-num" aria-hidden="true">02</div>
+            <div class="ring-tag"><div class="ring-title">Education</div><div class="ring-text">BSc in CSE at AIUB. CGPA 3.50 / 4.00. HSC A+ at Cambrian College.</div></div>
+          </div>
+          <div class="ring-panel" data-label="Projects" style="--i:3">
+            <div class="ring-num" aria-hidden="true">03</div>
+            <div class="ring-tag"><div class="ring-title">Projects</div><div class="ring-text">Journey by Bus, Hospital Management System, University Management System, Advanced Doorbell System.</div></div>
+          </div>
+          <div class="ring-panel" data-label="Skills" style="--i:4">
+            <div class="ring-num" aria-hidden="true">04</div>
+            <div class="ring-tag"><div class="ring-title">Skills</div><div class="ring-text">C++, C#, Java, HTML, CSS, React JS, Git and GitHub.</div></div>
+          </div>
+          <div class="ring-panel" data-label="Community" style="--i:5">
+            <div class="ring-num" aria-hidden="true">05</div>
+            <div class="ring-tag"><div class="ring-title">Community</div><div class="ring-text">KBFS volunteer certificates, BPS member, certified blood donor.</div></div>
+          </div>
+          </div>
+        </div>
+        <div class="ring-controls">
+          <button type="button" class="ring-btn" data-ring="-1" aria-label="Rotate left">‹</button>
+          <span class="ring-caption" aria-live="polite">Akibur Rahman</span>
+          <button type="button" class="ring-btn" data-ring="1" aria-label="Rotate right">›</button>
+        </div>
+      </div>
+    </section>
 
     <section class="section">
       <div class="container">
