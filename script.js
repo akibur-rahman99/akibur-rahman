@@ -36,10 +36,10 @@ if (nav) {
 
 // Chosen profile (from the "Who's watching?" screen) shows in the nav
 const PROFILES = {
-  recruiter: ['Recruiter', '#2f80ed', ['Resume', 'resume.html'], ['education', 'top', 'achievements', 'skills', 'projects', 'contact']],
+  recruiter: ['Recruiter', '#4a6fa5', ['Resume', 'resume.html'], ['education', 'top', 'achievements', 'skills', 'projects', 'contact']],
   developer: ['Developer', '#e50914', ['Projects', 'projects.html'], ['projects', 'top', 'skills', 'education', 'achievements', 'contact']],
-  collaborator: ['Collaborator', '#f5a524', ['Contact', 'contact.html'], ['achievements', 'projects', 'contact', 'top', 'skills', 'education']],
-  guest: ['Guest', '#2ecc71', ['Projects', 'projects.html'], ['top', 'projects', 'skills', 'education', 'achievements', 'contact']]
+  collaborator: ['Collaborator', '#d4a53a', ['Contact', 'contact.html'], ['achievements', 'projects', 'contact', 'top', 'skills', 'education']],
+  guest: ['Guest', '#7d838d', ['Projects', 'projects.html'], ['top', 'projects', 'skills', 'education', 'achievements', 'contact']]
 };
 let chosen = new URLSearchParams(window.location.search).get('as');
 try {

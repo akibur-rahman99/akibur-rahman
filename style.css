@@ -9,6 +9,7 @@
   --muted:#b3b3b3;
   --line:rgba(255,255,255,.14);
   --red:#e50914;
+  --gold:#d4a53a;
   --radius:4px;
   --gutter:4%;
   --display:"Bebas Neue", Impact, "Arial Narrow", sans-serif;
@@ -50,7 +51,7 @@ h1,h2,h3{margin:0}
 .nav-links a:hover{color:rgba(255,255,255,.55)}
 .nav-links a.active{color:#fff; font-weight:700}
 .nav-profile{display:flex; align-items:center; gap:10px; text-decoration:none; font-size:14px}
-.nav-avatar{width:32px; height:32px; border-radius:4px; background:#2f80ed; display:block}
+.nav-avatar{width:32px; height:32px; border-radius:4px; background:#7d838d; display:block}
 .nav-toggle{
   display:none; width:44px; height:44px;
   border:1px solid var(--line); border-radius:var(--radius);
@@ -368,12 +369,12 @@ a.pill:hover{background:#3a3a3a}
 /* ---------- Top moments ---------- */
 .moments{display:grid; grid-template-columns:repeat(auto-fill, minmax(230px, 1fr)); gap:16px; margin-bottom:24px}
 .moment{
-  padding:24px 20px; border:1px solid rgba(201,162,39,.55); border-radius:8px;
-  background:linear-gradient(180deg, rgba(201,162,39,.10), rgba(24,24,24,1) 70%);
+  padding:24px 20px; border:1px solid rgba(212,165,58,.55); border-radius:8px;
+  background:linear-gradient(180deg, rgba(212,165,58,.10), rgba(24,24,24,1) 70%);
   transition:transform .25s ease, border-color .25s ease;
 }
-.moment:hover{transform:translateY(-4px); border-color:#d8b441}
-.moment-kind{font-size:12px; font-weight:700; letter-spacing:.14em; text-transform:uppercase; color:#d8b441}
+.moment:hover{transform:translateY(-4px); border-color:var(--gold)}
+.moment-kind{font-size:12px; font-weight:700; letter-spacing:.14em; text-transform:uppercase; color:var(--gold)}
 .moment-title{margin:10px 0 6px; font:400 clamp(28px, 2.6vw, 36px)/1.05 var(--display); letter-spacing:.02em}
 .moment-sub{margin:0; color:var(--muted); font-size:14px}
 
