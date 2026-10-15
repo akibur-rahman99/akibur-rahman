@@ -809,3 +809,23 @@ a.tile:hover .tile-icon, a.tile:focus-visible .tile-icon{scale:1.1; background:v
 .poster-thumb > .tile-title{z-index:1}
 .poster:hover .tile-ghost{opacity:.2; scale:1.08; rotate:-3deg}
 .poster:hover .tile-icon{scale:1.1; background:var(--red); border-color:var(--red)}
+
+/* ---------- Certificates ---------- */
+.sec-sub{margin:40px 0 8px; font:400 clamp(30px, 3vw, 42px)/1.05 var(--display); letter-spacing:.03em; scroll-margin-top:90px}
+.cert-intro{margin:0 0 18px; color:var(--muted); max-width:70ch}
+.certs{display:grid; grid-template-columns:repeat(auto-fit, minmax(300px, 1fr)); gap:18px; margin-bottom:24px}
+.cert{
+  display:flex; flex-direction:column; overflow:hidden;
+  background:#1f1f1f; border:1px solid #2c2c2c; border-radius:10px;
+  transition:transform var(--t-hover) var(--ease), border-color var(--t-hover) var(--ease);
+}
+.cert:hover{transform:translateY(-4px); border-color:var(--gold)}
+.cert-img{display:block; background:#fff; line-height:0}
+.cert-img img{width:100%; height:auto; display:block; transition:transform .5s var(--ease)}
+.cert:hover .cert-img img{transform:scale(1.02)}
+.cert-img{overflow:hidden}
+.cert-body{padding:16px 18px 20px; display:flex; flex-direction:column; gap:6px; flex:1}
+.cert-title{margin:4px 0 2px; font:400 clamp(28px, 2.6vw, 36px)/1.05 var(--display); letter-spacing:.02em}
+.cert-btn{align-self:flex-start; margin-top:auto}
+.cert-body .moment-sub:last-of-type{margin-bottom:10px}
+@media (prefers-reduced-motion: reduce){.cert,.cert-img img{transition:none}.cert:hover{transform:none}.cert:hover .cert-img img{transform:none}}
