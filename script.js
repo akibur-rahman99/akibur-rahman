@@ -37,10 +37,10 @@ if (nav) {
 // Chosen profile (from the "Who's watching?" screen) shows in the nav
 const AVATARS = {"recruiter": "<svg viewBox=\"0 0 100 100\" aria-hidden=\"true\" focusable=\"false\"><rect width=\"100\" height=\"100\" fill=\"#4a6fa5\"/><path d=\"M14 100c2-21 17-31 36-31s34 10 36 31z\" fill=\"#f3f3f3\"/><path d=\"M38 70l12 12 12-12-4-3-8 7-8-7z\" fill=\"#dcdcdc\"/><path d=\"M50 72l-4.500 5 3 20h3l3-20z\" fill=\"#1d2f4d\"/><circle cx=\"50\" cy=\"42\" r=\"19\" fill=\"#f2d6bb\"/><path d=\"M30.5 40c-1-15 7-23 19.5-23s20.500 8 19.500 23c-4-8-10-11.500-19.500-11.500S34.500 32 30.500 40z\" fill=\"#231a17\"/><g class=\"av-eyes\"><circle cx=\"42\" cy=\"41\" r=\"3.8\" fill=\"#fff\"/><circle class=\"pupil\" cx=\"42\" cy=\"41\" r=\"1.9\" fill=\"#1a1a1a\"/><circle cx=\"58\" cy=\"41\" r=\"3.8\" fill=\"#fff\"/><circle class=\"pupil\" cx=\"58\" cy=\"41\" r=\"1.9\" fill=\"#1a1a1a\"/></g><path d=\"M42 51q8 6.5 16 0\" fill=\"none\" stroke=\"#7a3d2a\" stroke-width=\"2.4\" stroke-linecap=\"round\"/></svg>", "security": "<svg viewBox=\"0 0 100 100\" aria-hidden=\"true\" focusable=\"false\"><rect width=\"100\" height=\"100\" fill=\"#e50914\"/><path d=\"M14 100c2-21 17-31 36-31s34 10 36 31z\" fill=\"#1b1b1f\"/><circle cx=\"50\" cy=\"44\" r=\"26\" fill=\"#1b1b1f\"/><path d=\"M50 74l10 3.500v7.500c0 6-4.500 9.500-10 11.500-5.500-2-10-5.500-10-11.500v-7.500z\" fill=\"#fff\" opacity=\".92\"/><path d=\"M45 85l3.500 3.500L56 81\" fill=\"none\" stroke=\"#e50914\" stroke-width=\"2.600\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/><circle cx=\"50\" cy=\"42\" r=\"19\" fill=\"#f2d6bb\"/><path d=\"M31 40c1-12 9-17 19-17s18 5 19 17c-5-5-11-7-19-7s-14 2-19 7z\" fill=\"#1b1b1f\"/><g class=\"av-eyes\"><circle cx=\"42\" cy=\"41\" r=\"3.8\" fill=\"#fff\"/><circle class=\"pupil\" cx=\"42\" cy=\"41\" r=\"1.9\" fill=\"#1a1a1a\"/><circle cx=\"58\" cy=\"41\" r=\"3.8\" fill=\"#fff\"/><circle class=\"pupil\" cx=\"58\" cy=\"41\" r=\"1.9\" fill=\"#1a1a1a\"/></g><path d=\"M42 51q8 6.5 16 0\" fill=\"none\" stroke=\"#7a3d2a\" stroke-width=\"2.4\" stroke-linecap=\"round\"/></svg>", "collaborator": "<svg viewBox=\"0 0 100 100\" aria-hidden=\"true\" focusable=\"false\"><rect width=\"100\" height=\"100\" fill=\"#d4a53a\"/><path d=\"M14 100c2-21 17-31 36-31s34 10 36 31z\" fill=\"#3a2a10\"/><path d=\"M44 70l6 7 6-7z\" fill=\"#d4a53a\"/><circle cx=\"50\" cy=\"42\" r=\"19\" fill=\"#f2d6bb\"/><path d=\"M30.5 40c-1-15 7-23 19.5-23s20.500 8 19.500 23c-4-8-10-11.500-19.500-11.500S34.500 32 30.500 40z\" fill=\"#231a17\"/><path d=\"M29.500 42a20.500 20.500 0 0 1 41 0\" fill=\"none\" stroke=\"#2a2a2a\" stroke-width=\"3.600\" stroke-linecap=\"round\"/><rect x=\"25.500\" y=\"38\" width=\"6\" height=\"12\" rx=\"3\" fill=\"#2a2a2a\"/><rect x=\"68.500\" y=\"38\" width=\"6\" height=\"12\" rx=\"3\" fill=\"#2a2a2a\"/><path d=\"M71.500 49q0 9-13 9.500\" fill=\"none\" stroke=\"#2a2a2a\" stroke-width=\"2.400\" stroke-linecap=\"round\"/><circle cx=\"57\" cy=\"58.500\" r=\"2.600\" fill=\"#2a2a2a\"/><g class=\"av-eyes\"><circle cx=\"42\" cy=\"41\" r=\"3.8\" fill=\"#fff\"/><circle class=\"pupil\" cx=\"42\" cy=\"41\" r=\"1.9\" fill=\"#1a1a1a\"/><circle cx=\"58\" cy=\"41\" r=\"3.8\" fill=\"#fff\"/><circle class=\"pupil\" cx=\"58\" cy=\"41\" r=\"1.9\" fill=\"#1a1a1a\"/></g><path d=\"M42 51q8 6.5 16 0\" fill=\"none\" stroke=\"#7a3d2a\" stroke-width=\"2.4\" stroke-linecap=\"round\"/></svg>", "guest": "<svg viewBox=\"0 0 100 100\" aria-hidden=\"true\" focusable=\"false\"><rect width=\"100\" height=\"100\" fill=\"#7d838d\"/><path d=\"M14 100c2-21 17-31 36-31s34 10 36 31z\" fill=\"#aeb3bb\"/><circle cx=\"50\" cy=\"42\" r=\"19\" fill=\"#d9dce1\"/><text x=\"50\" y=\"52\" text-anchor=\"middle\" font-family=\"Bebas Neue, Impact, sans-serif\" font-size=\"30\" fill=\"#7d838d\">?</text></svg>"};
 const PROFILES = {
-  recruiter: ['Recruiter', '#4a6fa5', ['Resume', 'resume.html'], ['education', 'top', 'achievements', 'skills', 'projects', 'contact']],
-  security: ['Security Team', '#e50914', ['Projects', 'projects.html'], ['projects', 'top', 'skills', 'education', 'achievements', 'contact']],
-  collaborator: ['Collaborator', '#d4a53a', ['Contact', 'contact.html'], ['achievements', 'projects', 'contact', 'top', 'skills', 'education']],
-  guest: ['Guest', '#7d838d', ['Projects', 'projects.html'], ['top', 'projects', 'skills', 'education', 'achievements', 'contact']]
+  recruiter: ['Recruiter', '#4a6fa5', ['Resume', 'resume.html'], ['explore', 'story', 'education', 'top', 'achievements', 'skills', 'projects', 'contact']],
+  security: ['Security Team', '#e50914', ['Projects', 'projects.html'], ['explore', 'projects', 'top', 'story', 'skills', 'education', 'achievements', 'contact']],
+  collaborator: ['Collaborator', '#d4a53a', ['Contact', 'contact.html'], ['explore', 'achievements', 'story', 'projects', 'contact', 'top', 'skills', 'education']],
+  guest: ['Guest', '#7d838d', ['Projects', 'projects.html'], ['explore', 'story', 'top', 'projects', 'skills', 'education', 'achievements', 'contact']]
 };
 let chosen = new URLSearchParams(window.location.search).get('as');
 if (chosen === 'developer') chosen = 'security'; // old links
@@ -192,6 +192,34 @@ const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').match
 const finePointer = window.matchMedia('(pointer: fine)').matches;
 const clamp = (v, a, b) => Math.min(b, Math.max(a, v));
 
+// ---- Continue exploring: remember which pages were visited -------------
+(() => {
+  let seen = [];
+  try { seen = JSON.parse(localStorage.getItem('seenPages') || '[]'); } catch (e) { seen = []; }
+  const here = document.body.dataset.page;
+  if (here && !seen.includes(here)) {
+    seen.push(here);
+    try { localStorage.setItem('seenPages', JSON.stringify(seen)); } catch (e) { /* private mode */ }
+  }
+  document.querySelectorAll('.row').forEach(row => {
+    const tiles = [...row.querySelectorAll('.tile[data-explore]')];
+    if (!tiles.length) return;
+    const track = tiles[0].parentElement;
+    tiles.forEach(t => {
+      const done = seen.includes(t.dataset.explore);
+      const bar = t.querySelector('.progress > span');
+      if (bar) bar.style.setProperty('--w', done ? '100%' : '0%');
+      const tag = document.createElement('span');
+      tag.className = 'tile-seen' + (done ? '' : ' new');
+      tag.textContent = done ? 'Watched' : 'Up next';
+      t.appendChild(tag);
+    });
+    // unvisited first, original order kept inside each group
+    [...tiles.filter(t => !seen.includes(t.dataset.explore)), ...tiles.filter(t => seen.includes(t.dataset.explore))]
+      .forEach(t => track.appendChild(t));
+  });
+})();
+
 // ---- Scroll reveals --------------------------------------------------
 (() => {
   const rows = document.querySelectorAll('.row');
@@ -214,7 +242,7 @@ const clamp = (v, a, b) => Math.min(b, Math.max(a, v));
   const items = [
     ['.page-title', false, 0], ['.page-sub', false, 2],
     ['.section-head', false, 0], ['.dossier', false, 0], ['.t-item', true],
-    ['.poster', true], ['.moment', true], ['.links li', true],
+    ['.poster', true], ['.moment', true], ['.episode', true], ['.links li', true],
     ['.resume-head', false, 0], ['.resume-contact', false, 1], ['.resume-block', false, 0],
     ['.ring-scene', false, 0], ['.ring-controls', false, 2], ['.avatar-stage', false, 1], ['.footer-inner', false, 0]
   ];

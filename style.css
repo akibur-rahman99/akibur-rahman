@@ -710,3 +710,23 @@ a.pill:hover{background:#3a3a3a}
 .poster-link{display:inline-block; margin-top:12px; font-size:14px; font-weight:700; color:#fff; text-decoration:none; border-bottom:2px solid var(--red); padding-bottom:1px}
 .poster-link:hover{color:var(--red)}
 .dossier-body a{color:#fff; text-decoration-color:var(--red); text-underline-offset:3px}
+
+/* ---------- Continue exploring + The full story ---------- */
+.tile[data-explore] .tile-list{font-size:14px; color:#e5e5e5}
+.tile-seen{position:absolute !important; top:12px; right:12px; padding:2px 8px; border-radius:3px; font-size:11px; font-weight:700; letter-spacing:.1em; text-transform:uppercase; background:rgba(0,0,0,.55); color:#fff}
+.tile-seen.new{background:var(--red)}
+.row[aria-label="Continue exploring"]{margin-top:clamp(24px, 4vw, 48px)}
+
+.episodes{display:grid; grid-template-columns:repeat(auto-fill, minmax(260px, 1fr)); gap:16px}
+.episode{
+  position:relative; overflow:hidden; padding:18px 20px 22px; min-height:200px;
+  border:1px solid var(--line); border-radius:8px;
+  background:linear-gradient(160deg, var(--g1, #3a0d10) -40%, var(--surface) 62%);
+  transition:transform var(--t-hover) var(--ease), border-color var(--t-hover) ease;
+}
+.episode:hover{transform:translateY(-4px); border-color:rgba(255,255,255,.35)}
+.ep-num{font:400 64px/1 var(--display); color:transparent; -webkit-text-stroke:2px rgba(255,255,255,.26); letter-spacing:.02em}
+.ep-title{margin:6px 0 8px; font:400 clamp(26px, 2.2vw, 32px)/1.05 var(--display); letter-spacing:.02em}
+.ep-text{margin:0; color:#d2d2d2; font-size:15px; line-height:1.5}
+.next-ep{grid-column:1 / -1; min-height:0; border-color:rgba(229,9,20,.6); background:linear-gradient(160deg, rgba(229,9,20,.22), var(--surface) 70%)}
+.next-ep .spot-actions{margin-top:16px; display:flex; flex-wrap:wrap; gap:12px}
