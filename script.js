@@ -193,8 +193,13 @@ if (!reduceMotion) {
     if (a.target === '_blank' || a.hasAttribute('download') || a.origin !== window.location.origin) return;
     if (a.pathname === window.location.pathname) return; // same page (hash, intro buttons)
     e.preventDefault();
-    document.body.classList.add('leaving');
-    setTimeout(() => { window.location.href = a.href; }, 200);
+    const picking = a.classList.contains('profile');
+    if (picking) {
+      a.classList.add('chosen');
+      a.parentElement.classList.add('choosing');
+    }
+    setTimeout(() => document.body.classList.add('leaving'), picking ? 350 : 0);
+    setTimeout(() => { window.location.href = a.href; }, picking ? 580 : 200);
   });
   window.addEventListener('pageshow', () => document.body.classList.remove('leaving'));
 }
