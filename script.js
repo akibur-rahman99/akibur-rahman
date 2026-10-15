@@ -311,33 +311,45 @@ if (!reduceMotion && finePointer) {
   hero.addEventListener('pointerleave', () => { tx = 0; ty = 0; go(); });
 })();
 
-// ---- Contact avatar: head and eyes follow the pointer ------------------
+// ---- Contact avatar: cinematic entrance, head/eyes/brows follow the pointer ----
 (() => {
   const svg = document.querySelector('.avatar-svg');
   if (!svg) return;
-  const head = svg.querySelector('#av-head');
-  const hair = svg.querySelector('#av-hair');
-  const feat = svg.querySelector('#av-feat');
-  const body = svg.querySelector('#av-body');
-  const eyeParts = ['#av-pupil-l', '#av-pupil-r', '#av-shine-l', '#av-shine-r'].map(s => svg.querySelector(s));
-  const bubble = document.querySelector('.avatar-bubble');
-  let tx = 0, ty = 0, cx = 0, cy = 0, last = performance.now(), seen = false;
+  const stage = svg.closest('.avatar-stage');
+  const $ = s => svg.querySelector(s);
+  const head = $('#av-head'), hair = $('#av-hair'), feat = $('#av-feat'), body = $('#av-body'), hands = $('#av-hands');
+  const brows = $('#av-brows'), eyeL = $('#av-eyeball-l'), eyeR = $('#av-eyeball-r'), glint = $('#av-glint');
+  const mClosed = $('#av-mouth-closed'), mOpen = $('#av-mouth-open'), sweep = $('#av-sweep');
+  const bubble = stage.querySelector('.avatar-bubble');
+  const dust = stage.querySelector('.avatar-dust');
+  let tx = 0, ty = 0, cx = 0, cy = 0, sp = 0, spUntil = 0, last = performance.now(), seen = false;
+  const f = n => n.toFixed(2);
 
-  const apply = () => {
-    head.style.transform = 'rotate(' + (cx * 6).toFixed(2) + 'deg) translate(' + (cx * 5).toFixed(2) + 'px,' + (cy * 3).toFixed(2) + 'px)';
-    hair.style.transform = 'translate(' + (cx * 3).toFixed(2) + 'px,' + (cy * 2).toFixed(2) + 'px)';
-    feat.style.transform = 'translate(' + (cx * 8).toFixed(2) + 'px,' + (cy * 5.5).toFixed(2) + 'px)';
-    body.style.transform = 'translate(' + (cx * -3).toFixed(2) + 'px,0)';
-    eyeParts.forEach(p => { p.style.transform = 'translate(' + (cx * 5.2).toFixed(2) + 'px,' + (cy * 3.4).toFixed(2) + 'px)'; });
+  const apply = (now) => {
+    const br = reduceMotion ? 0 : Math.sin(now / 850);
+    head.style.transform = 'rotate(' + f(cx * 7) + 'deg) translate(' + f(cx * 7) + 'px,' + f(cy * 4 + br * 0.8) + 'px)';
+    hair.style.transform = 'translate(' + f(cx * 4) + 'px,' + f(cy * 2.5) + 'px)';
+    feat.style.transform = 'translate(' + f(cx * 11) + 'px,' + f(cy * 7) + 'px)';
+    body.style.transform = 'translate(' + f(cx * -4) + 'px,0) scale(1,' + (1 + 0.006 * br).toFixed(4) + ')';
+    hands.style.transform = 'translate(' + f(cx * -6) + 'px,' + f(cy * -2 + br * 1.5) + 'px)';
+    const eye = 'translate(' + f(cx * 9) + 'px,' + f(cy * 6) + 'px)';
+    eyeL.style.transform = eye; eyeR.style.transform = eye;
+    brows.style.transform = 'translate(0,' + f(-sp * 10 + cy * -2) + 'px)';
+    glint.style.transform = 'skewX(-16deg) translateX(' + f(cx * 80 + 12) + 'px)';
+    const open = sp > 0.45;
+    mOpen.style.opacity = open ? 1 : 0;
+    mClosed.style.opacity = open ? 0 : 1;
   };
-  if (reduceMotion) { apply(); return; }
+  if (reduceMotion) { apply(0); stage.classList.add('live'); return; }
 
+  // pointer: the head follows, the spotlight follows too
   window.addEventListener('pointermove', e => {
     const r = svg.getBoundingClientRect();
-    const mx = r.left + r.width * 0.5;
-    const my = r.top + r.height * 0.42;
-    tx = clamp((e.clientX - mx) / 360, -1, 1);
-    ty = clamp((e.clientY - my) / 300, -1, 1);
+    tx = clamp((e.clientX - (r.left + r.width * 0.5)) / (r.width * 0.8), -1, 1);
+    ty = clamp((e.clientY - (r.top + r.height * 0.42)) / (r.height * 0.6), -1, 1);
+    const sr = stage.getBoundingClientRect();
+    stage.style.setProperty('--lx', f(e.clientX - sr.left) + 'px');
+    stage.style.setProperty('--ly', f(e.clientY - sr.top) + 'px');
     last = performance.now();
     seen = true;
   }, { passive: true });
@@ -349,20 +361,60 @@ if (!reduceMotion && finePointer) {
     bubble.textContent = text;
     bubble.classList.add('show');
     clearTimeout(showTimer);
-    showTimer = setTimeout(() => bubble.classList.remove('show'), 1700);
+    showTimer = setTimeout(() => bubble.classList.remove('show'), 1800);
   };
-  svg.addEventListener('click', () => say('Hey, caught you!'));
+  svg.addEventListener('click', () => {
+    sp = 1; spUntil = performance.now() + 900;
+    say(['Hey, caught you!', 'Boo!', 'Ouch, that tickles!'][Math.floor(Math.random() * 3)]);
+    svg.animate([{ scale: 1 }, { scale: 1.04 }, { scale: 1 }], { duration: 460, easing: 'cubic-bezier(.2,.8,.2,1)' });
+  });
   svg.addEventListener('pointerenter', () => { if (finePointer) say('Hi there!'); });
 
+  // light sweep over the blazer
+  const doSweep = () => {
+    sweep.animate(
+      [{ transform: 'skewX(-18deg) translateX(0)', opacity: 0 }, { opacity: 1, offset: 0.2 }, { opacity: 1, offset: 0.8 }, { transform: 'skewX(-18deg) translateX(980px)', opacity: 0 }],
+      { duration: 2000, easing: 'ease-in-out' }
+    );
+  };
+
+  // floating dust in the spotlight
+  for (let i = 0; i < 18; i++) {
+    const d = document.createElement('i');
+    d.style.setProperty('--x', (8 + Math.random() * 84) + '%');
+    d.style.setProperty('--y', (4 + Math.random() * 40) + '%');
+    d.style.setProperty('--s', (2 + Math.random() * 3.5).toFixed(1) + 'px');
+    d.style.setProperty('--t', (6 + Math.random() * 6).toFixed(1) + 's');
+    d.style.setProperty('--d', (Math.random() * 6).toFixed(1) + 's');
+    d.style.setProperty('--dx', (Math.random() * 60 - 30).toFixed(0) + 'px');
+    dust.appendChild(d);
+  }
+
+  // start the show when the stage scrolls into view
+  let started = false;
+  const start = () => {
+    if (started) return;
+    started = true;
+    stage.classList.add('live');
+    setTimeout(doSweep, 1500);
+    setTimeout(() => say('Hi there!'), 2100);
+    setInterval(() => { if (!document.hidden) doSweep(); }, 11000);
+  };
+  if ('IntersectionObserver' in window) {
+    const io = new IntersectionObserver(es => { if (es.some(e => e.isIntersecting)) { start(); io.disconnect(); } }, { threshold: 0.3 });
+    io.observe(stage);
+  } else start();
+
   const tick = now => {
-    // With no pointer for a while the avatar glances around on its own
+    if (sp > 0 && now > spUntil) sp = Math.max(0, sp - 0.06);
+    // with no pointer for a while the avatar glances around on its own
     if (!seen || now - last > 3500) {
       tx = Math.sin(now / 1900) * 0.7;
       ty = Math.sin(now / 2600 + 1) * 0.25;
     }
     cx += (tx - cx) * 0.09;
     cy += (ty - cy) * 0.09;
-    apply();
+    apply(now);
     requestAnimationFrame(tick);
   };
   requestAnimationFrame(tick);
