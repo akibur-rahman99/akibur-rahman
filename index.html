@@ -32,28 +32,67 @@
     <main class="chooser-main">
       <h1 class="chooser-title">Who's watching?</h1>
       <nav class="profiles" aria-label="Choose a profile">
-        <a class="profile" href="browse.html?as=recruiter">
-          <span class="profile-avatar"><svg viewBox="0 0 100 100" aria-hidden="true" focusable="false"><rect width="100" height="100" fill="#4a6fa5"/><circle cx="50" cy="40" r="17" fill="rgba(255,255,255,.92)"/><path d="M18 92c2-22 16-32 32-32s30 10 32 32z" fill="rgba(255,255,255,.92)"/></svg></span>
+        <a class="profile" href="browse.html?as=recruiter" data-key="recruiter" style="--c:#4a6fa5">
+          <span class="profile-avatar"><svg viewBox="0 0 100 100" aria-hidden="true" focusable="false"><rect width="100" height="100" fill="#4a6fa5"/><path d="M14 100c2-21 17-31 36-31s34 10 36 31z" fill="#f3f3f3"/><path d="M38 70l12 12 12-12-4-3-8 7-8-7z" fill="#dcdcdc"/><path d="M50 72l-4.500 5 3 20h3l3-20z" fill="#1d2f4d"/><circle cx="50" cy="42" r="19" fill="#f2d6bb"/><path d="M30.5 40c-1-15 7-23 19.5-23s20.500 8 19.500 23c-4-8-10-11.500-19.500-11.500S34.500 32 30.500 40z" fill="#231a17"/><g class="av-eyes"><circle cx="42" cy="41" r="3.8" fill="#fff"/><circle class="pupil" cx="42" cy="41" r="1.9" fill="#1a1a1a"/><circle cx="58" cy="41" r="3.8" fill="#fff"/><circle class="pupil" cx="58" cy="41" r="1.9" fill="#1a1a1a"/></g><path d="M42 51q8 6.5 16 0" fill="none" stroke="#7a3d2a" stroke-width="2.4" stroke-linecap="round"/></svg></span>
           <span class="profile-name">Recruiter</span>
-          <span class="profile-tag">Education and skills first</span>
+          <span class="profile-tag">Education, results and resume first</span>
         </a>
-        <a class="profile" href="browse.html?as=developer">
-          <span class="profile-avatar"><svg viewBox="0 0 100 100" aria-hidden="true" focusable="false"><rect width="100" height="100" fill="#e50914"/><rect x="33" y="23" width="34" height="34" rx="6" fill="rgba(255,255,255,.92)"/><path d="M18 92c2-22 16-32 32-32s30 10 32 32z" fill="rgba(255,255,255,.92)"/></svg></span>
-          <span class="profile-name">Developer</span>
-          <span class="profile-tag">Projects and stack first</span>
+        <a class="profile" href="browse.html?as=security" data-key="security" style="--c:#e50914">
+          <span class="profile-avatar"><svg viewBox="0 0 100 100" aria-hidden="true" focusable="false"><rect width="100" height="100" fill="#e50914"/><path d="M14 100c2-21 17-31 36-31s34 10 36 31z" fill="#1b1b1f"/><circle cx="50" cy="44" r="26" fill="#1b1b1f"/><path d="M50 74l10 3.500v7.500c0 6-4.500 9.500-10 11.500-5.500-2-10-5.500-10-11.500v-7.500z" fill="#fff" opacity=".92"/><path d="M45 85l3.500 3.500L56 81" fill="none" stroke="#e50914" stroke-width="2.600" stroke-linecap="round" stroke-linejoin="round"/><circle cx="50" cy="42" r="19" fill="#f2d6bb"/><path d="M31 40c1-12 9-17 19-17s18 5 19 17c-5-5-11-7-19-7s-14 2-19 7z" fill="#1b1b1f"/><g class="av-eyes"><circle cx="42" cy="41" r="3.8" fill="#fff"/><circle class="pupil" cx="42" cy="41" r="1.9" fill="#1a1a1a"/><circle cx="58" cy="41" r="3.8" fill="#fff"/><circle class="pupil" cx="58" cy="41" r="1.9" fill="#1a1a1a"/></g><path d="M42 51q8 6.5 16 0" fill="none" stroke="#7a3d2a" stroke-width="2.4" stroke-linecap="round"/></svg></span>
+          <span class="profile-name">Security Team</span>
+          <span class="profile-tag">Projects, stack and GitHub first</span>
         </a>
-        <a class="profile" href="browse.html?as=collaborator">
-          <span class="profile-avatar"><svg viewBox="0 0 100 100" aria-hidden="true" focusable="false"><rect width="100" height="100" fill="#d4a53a"/><circle cx="50" cy="40" r="17" fill="none" stroke="rgba(255,255,255,.92)" stroke-width="7"/><path d="M18 92c2-22 16-32 32-32s30 10 32 32z" fill="rgba(255,255,255,.92)"/></svg></span>
+        <a class="profile" href="browse.html?as=collaborator" data-key="collaborator" style="--c:#d4a53a">
+          <span class="profile-avatar"><svg viewBox="0 0 100 100" aria-hidden="true" focusable="false"><rect width="100" height="100" fill="#d4a53a"/><path d="M14 100c2-21 17-31 36-31s34 10 36 31z" fill="#3a2a10"/><path d="M44 70l6 7 6-7z" fill="#d4a53a"/><circle cx="50" cy="42" r="19" fill="#f2d6bb"/><path d="M30.5 40c-1-15 7-23 19.5-23s20.500 8 19.500 23c-4-8-10-11.500-19.500-11.500S34.500 32 30.500 40z" fill="#231a17"/><path d="M29.500 42a20.500 20.500 0 0 1 41 0" fill="none" stroke="#2a2a2a" stroke-width="3.600" stroke-linecap="round"/><rect x="25.500" y="38" width="6" height="12" rx="3" fill="#2a2a2a"/><rect x="68.500" y="38" width="6" height="12" rx="3" fill="#2a2a2a"/><path d="M71.500 49q0 9-13 9.500" fill="none" stroke="#2a2a2a" stroke-width="2.400" stroke-linecap="round"/><circle cx="57" cy="58.500" r="2.600" fill="#2a2a2a"/><g class="av-eyes"><circle cx="42" cy="41" r="3.8" fill="#fff"/><circle class="pupil" cx="42" cy="41" r="1.9" fill="#1a1a1a"/><circle cx="58" cy="41" r="3.8" fill="#fff"/><circle class="pupil" cx="58" cy="41" r="1.9" fill="#1a1a1a"/></g><path d="M42 51q8 6.5 16 0" fill="none" stroke="#7a3d2a" stroke-width="2.4" stroke-linecap="round"/></svg></span>
           <span class="profile-name">Collaborator</span>
-          <span class="profile-tag">Moments and contact first</span>
+          <span class="profile-tag">Community work and how to reach me</span>
         </a>
-        <a class="profile" href="browse.html?as=guest">
-          <span class="profile-avatar"><svg viewBox="0 0 100 100" aria-hidden="true" focusable="false"><rect width="100" height="100" fill="#7d838d"/><path d="M50 20 70 54H30z" fill="rgba(255,255,255,.92)"/><path d="M18 92c2-22 16-32 32-32s30 10 32 32z" fill="rgba(255,255,255,.92)"/></svg></span>
+        <a class="profile" href="browse.html?as=guest" data-key="guest" style="--c:#7d838d">
+          <span class="profile-avatar"><svg viewBox="0 0 100 100" aria-hidden="true" focusable="false"><rect width="100" height="100" fill="#7d838d"/><path d="M14 100c2-21 17-31 36-31s34 10 36 31z" fill="#aeb3bb"/><circle cx="50" cy="42" r="19" fill="#d9dce1"/><text x="50" y="52" text-anchor="middle" font-family="Bebas Neue, Impact, sans-serif" font-size="30" fill="#7d838d">?</text></svg></span>
           <span class="profile-name">Guest</span>
           <span class="profile-tag">The full series, in order</span>
         </a>
       </nav>
+      <div class="chooser-preview" aria-hidden="true">
+        <div class="pv" data-for="recruiter" aria-hidden="true">
+          <div class="pv-head"><strong>Recruiter</strong> sees these first</div>
+          <div class="pv-tiles">
+            <span class="pv-tile" style="--g1:#8a0b16; --g2:#1a0a0c">Education</span>
+            <span class="pv-tile" style="--g1:#32415a; --g2:#11151c">Top 5 picks</span>
+            <span class="pv-tile" style="--g1:#7a5c12; --g2:#1a1409">Top moments</span>
+          </div>
+          <div class="pv-foot">Main button: <b>Resume</b> · Quick facts and a resume button on top</div>
+        </div>
+        <div class="pv" data-for="security" aria-hidden="true">
+          <div class="pv-head"><strong>Security Team</strong> sees these first</div>
+          <div class="pv-tiles">
+            <span class="pv-tile" style="--g1:#32415a; --g2:#11151c">Projects</span>
+            <span class="pv-tile" style="--g1:#8a0b16; --g2:#1a0a0c">Top 5 picks</span>
+            <span class="pv-tile" style="--g1:#561327; --g2:#160a10">Skills</span>
+          </div>
+          <div class="pv-foot">Main button: <b>Projects</b> · Stack, project count and GitHub on top</div>
+        </div>
+        <div class="pv" data-for="collaborator" aria-hidden="true">
+          <div class="pv-head"><strong>Collaborator</strong> sees these first</div>
+          <div class="pv-tiles">
+            <span class="pv-tile" style="--g1:#7a5c12; --g2:#1a1409">Top moments</span>
+            <span class="pv-tile" style="--g1:#32415a; --g2:#11151c">Projects</span>
+            <span class="pv-tile" style="--g1:#8a0b16; --g2:#1a0a0c">Get in touch</span>
+          </div>
+          <div class="pv-foot">Main button: <b>Contact</b> · Community work and contact links on top</div>
+        </div>
+        <div class="pv" data-for="guest" aria-hidden="true">
+          <div class="pv-head"><strong>Guest</strong> sees these first</div>
+          <div class="pv-tiles">
+            <span class="pv-tile" style="--g1:#8a0b16; --g2:#1a0a0c">Top 5 picks</span>
+            <span class="pv-tile" style="--g1:#32415a; --g2:#11151c">Projects</span>
+            <span class="pv-tile" style="--g1:#561327; --g2:#160a10">Skills</span>
+          </div>
+          <div class="pv-foot">Main button: <b>Projects</b> · No spotlight, just the full show</div>
+        </div>
+      </div>
       <p class="chooser-note">Every profile sees the same real information. It only changes what plays first.</p>
+      <a class="manage" href="contact.html">Manage profiles <span>· links &amp; contact</span></a>
     </main>
   </div>
   <script src="./script.js"></script>

@@ -37,14 +37,17 @@ if (nav) {
 // Chosen profile (from the "Who's watching?" screen) shows in the nav
 const PROFILES = {
   recruiter: ['Recruiter', '#4a6fa5', ['Resume', 'resume.html'], ['education', 'top', 'achievements', 'skills', 'projects', 'contact']],
-  developer: ['Developer', '#e50914', ['Projects', 'projects.html'], ['projects', 'top', 'skills', 'education', 'achievements', 'contact']],
+  security: ['Security Team', '#e50914', ['Projects', 'projects.html'], ['projects', 'top', 'skills', 'education', 'achievements', 'contact']],
   collaborator: ['Collaborator', '#d4a53a', ['Contact', 'contact.html'], ['achievements', 'projects', 'contact', 'top', 'skills', 'education']],
   guest: ['Guest', '#7d838d', ['Projects', 'projects.html'], ['top', 'projects', 'skills', 'education', 'achievements', 'contact']]
 };
 let chosen = new URLSearchParams(window.location.search).get('as');
+if (chosen === 'developer') chosen = 'security'; // old links
 try {
-  if (chosen && PROFILES[chosen]) sessionStorage.setItem('profile', chosen);
-  else chosen = sessionStorage.getItem('profile');
+  if (chosen && PROFILES[chosen]) {
+    sessionStorage.setItem('profile', chosen);
+    localStorage.setItem('lastProfile', chosen);
+  } else chosen = sessionStorage.getItem('profile');
 } catch (e) { /* storage can be unavailable; fall back to the default */ }
 const profile = PROFILES[chosen] || PROFILES.guest;
 document.querySelectorAll('.nav-profile').forEach(el => {
@@ -70,6 +73,11 @@ if (homeRows.length) {
     if (label) label.textContent = profile[2][0];
   }
 }
+
+// Each profile gets its own spotlight strip under the hero
+document.querySelectorAll('.spotlight[data-spot]').forEach(sp => {
+  sp.hidden = sp.dataset.spot !== chosen;
+});
 
 // Skill genres: one panel at a time (all panels stay visible without JS)
 const uniTabs = document.querySelectorAll('.uni-tab');
@@ -116,12 +124,60 @@ document.querySelectorAll('.row').forEach(row => {
 const intro = document.getElementById('intro');
 const chooser = document.getElementById('chooser');
 if (intro && chooser) {
+  let last = null;
+  try { last = localStorage.getItem('lastProfile'); } catch (e) { /* ignore */ }
+  if (last === 'developer') last = 'security';
+  const tiles = [...chooser.querySelectorAll('.profile')];
+  const lastTile = tiles.find(t => t.dataset.key === last) || null;
+  if (lastTile) {
+    lastTile.classList.add('last');
+    const badge = document.createElement('span');
+    badge.className = 'profile-last';
+    badge.textContent = 'Last watched';
+    lastTile.appendChild(badge);
+  }
+
+  // Preview panel: shows what the hovered or focused profile plays first
+  const previews = [...chooser.querySelectorAll('.pv')];
+  const fallbackKey = (lastTile || tiles[0]).dataset.key;
+  const showPreview = key => previews.forEach(p => p.classList.toggle('on', p.dataset.for === key));
+  showPreview(fallbackKey);
+  tiles.forEach(t => {
+    t.addEventListener('pointerenter', () => showPreview(t.dataset.key));
+    t.addEventListener('focus', () => showPreview(t.dataset.key));
+  });
+  const nav = chooser.querySelector('.profiles');
+  nav.addEventListener('pointerleave', () => showPreview(document.activeElement && document.activeElement.dataset ? (document.activeElement.dataset.key || fallbackKey) : fallbackKey));
+
+  // Keyboard: arrows move between profiles, 1-4 jump straight in
+  chooser.addEventListener('keydown', e => {
+    const i = tiles.indexOf(document.activeElement);
+    if (e.key === 'ArrowRight' || e.key === 'ArrowDown') { e.preventDefault(); tiles[(i + 1 + tiles.length) % tiles.length].focus(); }
+    else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') { e.preventDefault(); tiles[(i - 1 + tiles.length) % tiles.length].focus(); }
+    else if (/^[1-9]$/.test(e.key) && tiles[+e.key - 1]) tiles[+e.key - 1].click();
+  });
+
+  // Eyes in the avatars follow the pointer
+  if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches && window.matchMedia('(pointer: fine)').matches) {
+    const svgs = tiles.map(t => t.querySelector('svg'));
+    window.addEventListener('pointermove', e => {
+      svgs.forEach(svg => {
+        const r = svg.getBoundingClientRect();
+        const dx = e.clientX - (r.left + r.width / 2);
+        const dy = e.clientY - (r.top + r.height * 0.42);
+        const d = Math.hypot(dx, dy) || 1;
+        const k = Math.min(1, d / 260);
+        svg.style.setProperty('--px', (dx / d) * k);
+        svg.style.setProperty('--py', (dy / d) * k);
+      });
+    }, { passive: true });
+  }
+
   const showChooser = () => {
     intro.hidden = true;
     chooser.hidden = false;
     window.scrollTo(0, 0);
-    const first = chooser.querySelector('.profile');
-    if (first) first.focus({ preventScroll: true });
+    (lastTile || tiles[0]).focus({ preventScroll: true });
   };
   if (window.location.hash === '#profiles') {
     showChooser();
