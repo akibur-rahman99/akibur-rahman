@@ -579,7 +579,7 @@ void main(){
   stage._akiClick = () => { if (onClick) onClick(); };
 });
 
-// ---- AKIRA (Akibur's Knowledge & Intelligence Response Agent): the avatar's chat box. It introduces itself, then reacts to the cursor ----
+// ---- FRIDAY: the avatar's AI chat box. It introduces itself, then reacts to the cursor ----
 (() => {
   const stage = document.querySelector('.avatar-stage');
   const box = stage && stage.querySelector('.aki');
@@ -623,11 +623,11 @@ void main(){
     busy = true;
     const hr = new Date().getHours();
     const tod = hr < 5 ? 'evening' : hr < 12 ? 'morning' : hr < 17 ? 'afternoon' : 'evening';
-    await type('initialising A.K.I.R.A. ... all systems nominal', 'sys');
+    await type('initialising FRIDAY ... all systems nominal', 'sys');
     await sleep(500);
-    await type(`Good ${tod}. I'm AKIRA, Akibur's Knowledge & Intelligence Response Agent.`);
+    await type(`Good ${tod}. I'm FRIDAY, Akibur's AI twin.`);
     await sleep(650);
-    await type('I am the AI twin of Akibur Rahman. He studies CSE at AIUB and is going deep into cyber security. I keep watch while he is offline.');
+    await type('I speak for Akibur Rahman. He studies CSE at AIUB and is going deep into cyber security. I keep watch while he is offline.');
     await sleep(650);
     await type("Move your cursor. I'll narrate.");
     busy = false; introDone = true; lastSay = performance.now();
