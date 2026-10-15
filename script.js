@@ -343,9 +343,9 @@ in vec2 p; out vec2 vUv;
 void main(){ vUv = vec2(p.x * .5 + .5, .5 - p.y * .5); gl_Position = vec4(p, 0., 1.); }`;
     const FS = `#version 300 es
 precision highp float;
-uniform sampler2D uTex, uDepth;
+uniform sampler2D uTex, uDepth, uClosed;
 uniform vec2 uM, uGaze, uPtr;
-uniform float uT, uIntro, uSweep, uPulse, uZoom, uFlare;
+uniform float uT, uIntro, uSweep, uPulse, uZoom, uFlare, uBlink;
 in vec2 vUv; out vec4 o;
 float g(float x, float s){ return exp(-x * x / (2. * s * s)); }
 void main(){
@@ -365,6 +365,17 @@ void main(){
   float lod = (1. - smoothstep(0., 1., uIntro)) * 3.5;
   vec4 t = textureLod(uTex, u2, lod);
   vec3 c = t.rgb; float a = t.a;                       // premultiplied
+  // blink: the eyes-closed frame shows through each eye opening, lid coming down from the top
+  if (uBlink > .001) {
+    vec2 bR = vec2(40. / 1024., 25. / 1536.);
+    vec2 r0 = vec2(370. / 1024., 195. / 1536.), r1 = vec2(600. / 1024., 275. / 1536.);
+    vec3 cl = textureLod(uClosed, clamp((u1 - r0) / (r1 - r0), 0., 1.), 0.).rgb * a;
+    float mL = 1. - smoothstep(.62, 1., length((u1 - eL) / bR));
+    float mR = 1. - smoothstep(.62, 1., length((u1 - eR) / bR));
+    float lyL = (u1.y - (eL.y - bR.y)) / (2. * bR.y), lyR = (u1.y - (eR.y - bR.y)) / (2. * bR.y);
+    float cov = max(mL * smoothstep(0., .35, uBlink * 1.6 - lyL), mR * smoothstep(0., .35, uBlink * 1.6 - lyR));
+    c = mix(c, cl, clamp(cov, 0., 1.));
+  }
   // key light that follows the pointer
   vec2 pd = (uv - uPtr) * vec2(.667, 1.);
   float L = g(length(pd), .22);
@@ -413,7 +424,7 @@ void main(){
     gl.enableVertexAttribArray(loc);
     gl.vertexAttribPointer(loc, 2, gl.FLOAT, false, 0, 0);
     const U = n => gl.getUniformLocation(prog, n);
-    const u = { M: U('uM'), Gaze: U('uGaze'), Ptr: U('uPtr'), T: U('uT'), Intro: U('uIntro'), Sweep: U('uSweep'), Pulse: U('uPulse'), Zoom: U('uZoom'), Flare: U('uFlare') };
+    const u = { M: U('uM'), Gaze: U('uGaze'), Ptr: U('uPtr'), T: U('uT'), Intro: U('uIntro'), Sweep: U('uSweep'), Pulse: U('uPulse'), Zoom: U('uZoom'), Flare: U('uFlare'), Blink: U('uBlink') };
 
     const loadTex = (src, unit, mip, premul) => new Promise(res => {
       const img = new Image();
@@ -435,6 +446,7 @@ void main(){
     });
     gl.uniform1i(U('uTex'), 0);
     gl.uniform1i(U('uDepth'), 1);
+    gl.uniform1i(U('uClosed'), 2);
 
     // ---- state (all motion is time-based)
     let cx = 0, cy = 0, vx = 0, vy = 0;               // head, a slightly under-damped spring
@@ -443,6 +455,7 @@ void main(){
     let pulse = 0, flare = 0, lockUntil = 0, lastMove = performance.now(), seen = false;
     let intro = reduceMotion ? 1 : 0, introStart = 0, liveAt = 0, sweepT = -1, sweepStart = 0;
     let live = false, visible = false, lastT = performance.now();
+    let blink = 0, blinkT = -1, nextBlink = 0, blinkLeft = 0, sleep = 0, haveClosed = false;
 
     const resize = () => {
       const r = canvas.getBoundingClientRect();
@@ -478,6 +491,22 @@ void main(){
       const pk = 1 - Math.exp(-dt * 9);
       px += (tpx - px) * pk; py += (tpy - py) * pk;
 
+      // blinking: a quick close and open every few seconds, sometimes twice; closed eyes after a long idle
+      if (haveClosed && !reduceMotion && intro > 0.85) {
+        if (blinkT < 0 && now > nextBlink) {
+          blinkT = 0; blinkLeft = Math.random() < 0.22 ? 1 : 0;
+          nextBlink = now + 2600 + Math.random() * 3400;
+        }
+        if (blinkT >= 0) {
+          blinkT += dt;
+          const k = blinkT < 0.085 ? blinkT / 0.085 : 1 - (blinkT - 0.085) / 0.17;
+          blink = Math.max(0, Math.min(1, k));
+          if (blinkT > 0.255) { blinkT = -1; blink = 0; if (blinkLeft) { blinkLeft = 0; nextBlink = now + 130; } }
+        }
+        const asleep = seen && now - lastMove > 30000;
+        sleep += ((asleep ? 1 : 0) - sleep) * (1 - Math.exp(-dt * (asleep ? 1.6 : 9)));
+        blink = Math.max(blink, sleep);
+      }
       const sinceLive = live ? (now - liveAt) / 1000 : 0;
       const zoom = 1 + 0.045 * (1 - Math.exp(-sinceLive / 3.4)) + 0.004 * Math.sin(t * 0.35);
       gl.uniform2f(u.M, cx, cy);
@@ -489,6 +518,7 @@ void main(){
       gl.uniform1f(u.Pulse, pulse);
       gl.uniform1f(u.Zoom, zoom);
       gl.uniform1f(u.Flare, flare);
+      gl.uniform1f(u.Blink, blink);
       gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
     };
 
@@ -506,7 +536,9 @@ void main(){
     };
     flareNow = () => { sweepT = 0; sweepStart = performance.now(); };
 
-    Promise.all([loadTex(canvas.dataset.tex, 0, true, true), loadTex(canvas.dataset.depth, 1, false, false)]).then(([a, b]) => {
+    Promise.all([loadTex(canvas.dataset.tex, 0, true, true), loadTex(canvas.dataset.depth, 1, false, false),
+      canvas.dataset.blink ? loadTex(canvas.dataset.blink, 2, false, true) : Promise.resolve(false)]).then(([a, b, c2]) => {
+      haveClosed = !!c2;
       if (!a || !b) { canvas.hidden = true; if (fallback) fallback.hidden = false; setupFallback(); return; }
       canvas.classList.add('ready');
       if (reduceMotion) { live = true; intro = 1; stage.classList.add('live'); draw(performance.now()); return; }
