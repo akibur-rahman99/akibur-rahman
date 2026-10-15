@@ -12,12 +12,25 @@
   <link rel="stylesheet" href="./style.css" />
 </head>
 <body class="chooser-body" data-page="chooser">
-  <header class="chooser-top">
-    <a class="brand" href="index.html" aria-label="Akibur Rahman">AKIBUR</a>
-  </header>
-  <main class="chooser-main">
-    <h1 class="chooser-title">Who's watching?</h1>
-    <nav class="profiles" aria-label="Choose a profile">
+  <section class="intro" id="intro" aria-label="Introduction">
+    <a class="intro-skip" href="browse.html" data-play>Skip intro</a>
+    <div class="intro-stage">
+      <h1 class="intro-name">Akibur Rahman</h1>
+      <p class="intro-role">CSE · Cyber security · AIUB</p>
+      <div class="intro-photo-wrap">
+        <img class="intro-photo" src="./assets/profile-cutout.webp" alt="Akibur Rahman" width="900" height="1441" />
+      </div>
+      <a class="btn btn-play intro-play" href="browse.html" data-play><span class="icon-play" aria-hidden="true"></span>Play now</a>
+    </div>
+  </section>
+
+  <div class="chooser-wrap" id="chooser" hidden>
+    <header class="chooser-top">
+      <a class="brand" href="index.html#profiles" aria-label="Akibur Rahman">AKIBUR</a>
+    </header>
+    <main class="chooser-main">
+      <h1 class="chooser-title">Who's watching?</h1>
+      <nav class="profiles" aria-label="Choose a profile">
         <a class="profile" href="browse.html?as=recruiter">
           <span class="profile-avatar"><svg viewBox="0 0 100 100" aria-hidden="true" focusable="false"><rect width="100" height="100" fill="#2f80ed"/><circle cx="50" cy="40" r="17" fill="rgba(255,255,255,.92)"/><path d="M18 92c2-22 16-32 32-32s30 10 32 32z" fill="rgba(255,255,255,.92)"/></svg></span>
           <span class="profile-name">Recruiter</span>
@@ -38,9 +51,10 @@
           <span class="profile-name">Guest</span>
           <span class="profile-tag">The full series, in order</span>
         </a>
-    </nav>
-    <p class="chooser-note">Every profile sees the same real information. It only changes what plays first.</p>
-  </main>
+      </nav>
+      <p class="chooser-note">Every profile sees the same real information. It only changes what plays first.</p>
+    </main>
+  </div>
   <script src="./script.js"></script>
 </body>
 </html>

@@ -111,3 +111,27 @@ document.querySelectorAll('.row').forEach(row => {
   track.addEventListener('scroll', update, { passive: true });
   window.addEventListener('resize', update);
 });
+
+// Intro on the first page: name, photo, "Play now", then the profile screen
+const intro = document.getElementById('intro');
+const chooser = document.getElementById('chooser');
+if (intro && chooser) {
+  const showChooser = () => {
+    intro.hidden = true;
+    chooser.hidden = false;
+    window.scrollTo(0, 0);
+    const first = chooser.querySelector('.profile');
+    if (first) first.focus({ preventScroll: true });
+  };
+  if (window.location.hash === '#profiles') {
+    showChooser();
+  } else {
+    intro.querySelectorAll('[data-play]').forEach(el => {
+      el.addEventListener('click', e => {
+        e.preventDefault();
+        history.replaceState(null, '', '#profiles');
+        showChooser();
+      });
+    });
+  }
+}
