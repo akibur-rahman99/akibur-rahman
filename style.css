@@ -705,3 +705,8 @@ a.pill:hover{background:#3a3a3a}
 @keyframes akiCaret{50%{opacity:0}}
 @keyframes akiDot{50%{opacity:.45}}
 @media (max-width: 720px){.aki{max-width:360px}}
+
+/* project repo link */
+.poster-link{display:inline-block; margin-top:12px; font-size:14px; font-weight:700; color:#fff; text-decoration:none; border-bottom:2px solid var(--red); padding-bottom:1px}
+.poster-link:hover{color:var(--red)}
+.dossier-body a{color:#fff; text-decoration-color:var(--red); text-underline-offset:3px}
