@@ -775,18 +775,18 @@ a.pill:hover{background:#3a3a3a}
   mask-image:linear-gradient(115deg, transparent 38%, #000 100%);
   opacity:.55;
 }
-:is(.tile, .top-card) > .tile-icon{
+:is(.tile, .top-card, .poster-thumb) > .tile-icon{
   position:absolute; top:12px; right:12px; z-index:1;
   display:grid; place-items:center; width:clamp(40px, 3.6vw, 50px); aspect-ratio:1; border-radius:50%;
   color:#fff; background:rgba(0,0,0,.30); border:1px solid rgba(255,255,255,.22); backdrop-filter:blur(2px);
   transition:scale var(--t-hover) var(--ease), background-color var(--t-hover) ease, border-color var(--t-hover) ease;
 }
-:is(.tile, .top-card) > .tile-icon svg{width:56%; height:56%; fill:none; stroke:currentColor; stroke-width:1.6; stroke-linecap:round; stroke-linejoin:round}
-:is(.tile, .top-card) > .tile-ghost{
+:is(.tile, .top-card, .poster-thumb) > .tile-icon svg{width:56%; height:56%; fill:none; stroke:currentColor; stroke-width:1.6; stroke-linecap:round; stroke-linejoin:round}
+:is(.tile, .top-card, .poster-thumb) > .tile-ghost{
   position:absolute; right:-14px; bottom:-18px; width:62%; aspect-ratio:1; z-index:0; color:#fff; opacity:.10;
   rotate:-8deg; pointer-events:none; transition:opacity var(--t-hover) ease, scale .5s var(--ease), rotate .5s var(--ease);
 }
-:is(.tile, .top-card) > .tile-ghost svg{width:100%; height:100%; fill:none; stroke:currentColor; stroke-width:.7; stroke-linecap:round; stroke-linejoin:round}
+:is(.tile, .top-card, .poster-thumb) > .tile-ghost svg{width:100%; height:100%; fill:none; stroke:currentColor; stroke-width:.7; stroke-linecap:round; stroke-linejoin:round}
 a.tile:hover .tile-ghost, a.tile:focus-visible .tile-ghost{opacity:.2; scale:1.08; rotate:-3deg}
 a.tile:hover .tile-icon, a.tile:focus-visible .tile-icon{scale:1.1; background:var(--red); border-color:var(--red)}
 /* project and info tiles keep their text clear of the artwork */
@@ -794,7 +794,18 @@ a.tile:hover .tile-icon, a.tile:focus-visible .tile-icon{scale:1.1; background:v
 .tile.info.has-art .tile-head{padding-top:18px}
 .tile-seen{top:auto !important; bottom:14px; right:12px !important}
 @media (prefers-reduced-motion: no-preference){
-  .js .row.in :is(.tile, .top-card) > .tile-icon{animation:pop .6s var(--ease) calc(.35s + var(--i, 0) * var(--step)) both}
+  .js .row.in :is(.tile, .top-card, .poster-thumb) > .tile-icon{animation:pop .6s var(--ease) calc(.35s + var(--i, 0) * var(--step)) both}
 }
 .tile.info.has-art .tile-title{max-width:calc(100% - 54px)}
 .top-card{position:relative; overflow:hidden} .top-card > .tile-icon{width:38px; top:10px; right:10px}
+
+.poster-thumb{overflow:hidden}
+.poster-thumb.has-art > .tile-kicker{position:absolute; top:14px; left:16px; margin:0; z-index:1}
+.poster-thumb.has-art::after{
+  content:""; position:absolute; inset:0; pointer-events:none;
+  background-image:radial-gradient(rgba(255,255,255,.16) 1px, transparent 1.3px); background-size:14px 14px;
+  -webkit-mask-image:linear-gradient(115deg, transparent 38%, #000 100%); mask-image:linear-gradient(115deg, transparent 38%, #000 100%); opacity:.55;
+}
+.poster-thumb > .tile-title{z-index:1}
+.poster:hover .tile-ghost{opacity:.2; scale:1.08; rotate:-3deg}
+.poster:hover .tile-icon{scale:1.1; background:var(--red); border-color:var(--red)}
