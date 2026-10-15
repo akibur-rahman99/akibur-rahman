@@ -216,7 +216,7 @@ const clamp = (v, a, b) => Math.min(b, Math.max(a, v));
     ['.section-head', false, 0], ['.dossier', false, 0], ['.t-item', false, 0],
     ['.poster', true], ['.moment', true], ['.links li', true],
     ['.resume-head', false, 0], ['.resume-contact', false, 1], ['.resume-block', false, 0],
-    ['.ring-scene', false, 0], ['.ring-controls', false, 2], ['.contact-grid .avatar-stage', false, 1]
+    ['.ring-scene', false, 0], ['.ring-controls', false, 2], ['.avatar-stage', false, 1]
   ];
   items.forEach(([sel, stagger, fixed]) => {
     document.querySelectorAll(sel).forEach(el => {
