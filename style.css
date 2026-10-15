@@ -692,3 +692,8 @@ a.pill:hover{background:#3a3a3a}
   .js .spotlight .spot-head, .js .spotlight .spot-actions{animation:rise .6s var(--ease) both}
   .js .spot-stat:nth-child(2){--i:1} .js .spot-stat:nth-child(3){--i:2} .js .spot-stat:nth-child(4){--i:3}
 }
+
+/* nav profile chip shows the same face avatar */
+.nav-avatar{overflow:hidden}
+.nav-avatar svg{display:block; width:100%; height:100%}
+.nav-profile:hover .nav-avatar{outline:2px solid #fff}
