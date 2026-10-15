@@ -213,10 +213,10 @@ const clamp = (v, a, b) => Math.min(b, Math.max(a, v));
   // [selector, siblings stagger?, fixed index]
   const items = [
     ['.page-title', false, 0], ['.page-sub', false, 2],
-    ['.section-head', false, 0], ['.dossier', false, 0], ['.t-item', false, 0],
+    ['.section-head', false, 0], ['.dossier', false, 0], ['.t-item', true],
     ['.poster', true], ['.moment', true], ['.links li', true],
     ['.resume-head', false, 0], ['.resume-contact', false, 1], ['.resume-block', false, 0],
-    ['.ring-scene', false, 0], ['.ring-controls', false, 2], ['.avatar-stage', false, 1]
+    ['.ring-scene', false, 0], ['.ring-controls', false, 2], ['.avatar-stage', false, 1], ['.footer-inner', false, 0]
   ];
   items.forEach(([sel, stagger, fixed]) => {
     document.querySelectorAll(sel).forEach(el => {
@@ -579,15 +579,15 @@ void main(){
   const SECTORS = {
     E:  ['East side: nothing there but the scrollbar. I checked.', 'Right edge. Dead end. Even I am not that secluded.'],
     NE: ['Top-right. Your profile chip lives up there.', 'North-east. Switching profiles? I support all four.'],
-    N:  ['Looking up? The menu is there. Skills, Projects, Resume.', 'Heading north. Click Resume if you are hiring.'],
+    N:  ['Looking up? The menu is there. Skills, Projects, Resume.', 'Heading north. Resume is up there if you are hiring.'],
     NW: ['Top-left. The AKIBUR logo takes you home.', 'North-west. That logo is a very good home button.'],
-    W:  ["Cursor west. That's where the links are. Email is the fastest.", 'Going left? Good call. The contact links live there.'],
+    W:  ["Cursor west. That's where the links are. Email is the fastest.", 'Going left? Good call. The contact links are over there.'],
     SW: ['South-west. Instagram lives down there.', 'Bottom-left. The links keep going, scroll a bit.'],
-    S:  ['Heading south. More links below. Keep scrolling.', 'Down there? Only my belt. Please look away.'],
-    SE: ["Bottom-right. You're near my watch. Real one, by the way.", 'South-east. Nothing classified here.']
+    S:  ['Heading south. More links below. Keep scrolling.', 'Down there? Scroll for more links. Nothing hidden, I promise.'],
+    SE: ["Bottom-right. Quiet corner. Nothing to see.", 'South-east. Nothing classified here.']
   };
   const LINKS = [
-    [/mailto:/, ['Email: Akibur replies fastest here.', 'Email it is. Subject lines with "hire" get read first.']],
+    [/mailto:/, ['Email: the quickest way to reach Akibur.', 'Email it is. Short subject line, clear ask, and he will see it.']],
     [/linkedin/, ['LinkedIn. Professional mode. Blazer on.', 'LinkedIn: the formal version of him.']],
     [/github/, ['GitHub: where the code lives. Inspect away. Responsibly.', 'GitHub. Fork nicely.']],
     [/tel:/, ['A real phone call. Bold. I respect it.']],
