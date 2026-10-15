@@ -300,41 +300,15 @@ if (!reduceMotion && finePointer) {
 })();
 
 // ---- Contact avatar: 2.5D parallax portrait (WebGL) -----------------------
-// Depth map makes the head turn toward the pointer, eyes follow it,
-// plus a spotlight that tracks the cursor, a light sweep and a glint on the glasses.
+// A depth map turns the head toward the pointer, the eyes follow it, and the key
+// light comes from the cursor. Everything is time-based, so it stays smooth.
 document.querySelectorAll('.avatar-canvas').forEach(canvas => {
   const stage = canvas.closest('.avatar-stage');
   const fallback = stage.querySelector('.avatar-fallback');
-  const bubble = stage.querySelector('.avatar-bubble');
-  const dust = stage.querySelector('.avatar-dust');
   const f = n => n.toFixed(2);
+  const gl = canvas.getContext('webgl2', { antialias: false, alpha: false });
+  let onPointer = null, onClick = null, flareNow = () => {};
 
-  // ---- speech bubble, dust, start of the show (shared by both renderers)
-  let showTimer = 0;
-  const say = text => {
-    if (!bubble) return;
-    bubble.textContent = text;
-    bubble.classList.add('show');
-    clearTimeout(showTimer);
-    showTimer = setTimeout(() => bubble.classList.remove('show'), 1800);
-  };
-  if (!reduceMotion && dust) {
-    for (let i = 0; i < 18; i++) {
-      const d = document.createElement('i');
-      d.style.setProperty('--x', (8 + Math.random() * 84) + '%');
-      d.style.setProperty('--y', (4 + Math.random() * 40) + '%');
-      d.style.setProperty('--s', (2 + Math.random() * 3.5).toFixed(1) + 'px');
-      d.style.setProperty('--t', (6 + Math.random() * 6).toFixed(1) + 's');
-      d.style.setProperty('--d', (Math.random() * 6).toFixed(1) + 's');
-      d.style.setProperty('--dx', (Math.random() * 60 - 30).toFixed(0) + 'px');
-      dust.appendChild(d);
-    }
-  }
-
-  const gl = canvas.getContext('webgl2', { antialias: false, alpha: true, premultipliedAlpha: true });
-  let onPointer = null, sweepNow = () => {}, onClick = null, draw = null;
-
-  // ---------------- WebGL renderer
   if (gl) {
     const VS = `#version 300 es
 in vec2 p; out vec2 vUv;
@@ -343,12 +317,13 @@ void main(){ vUv = vec2(p.x * .5 + .5, .5 - p.y * .5); gl_Position = vec4(p, 0.,
 precision highp float;
 uniform sampler2D uTex, uDepth;
 uniform vec2 uM, uGaze, uPtr;
-uniform float uT, uIntro, uSweep, uPulse;
+uniform float uT, uIntro, uSweep, uPulse, uZoom, uFlare;
 in vec2 vUv; out vec4 o;
 float g(float x, float s){ return exp(-x * x / (2. * s * s)); }
 void main(){
   vec2 uv = vUv;
-  uv = (uv - vec2(.5, .3)) * (1. - .03 * uPulse) + vec2(.5, .3);
+  uv = (uv - vec2(.5, .30)) / uZoom + vec2(.5, .30);
+  uv = (uv - vec2(.5, .30)) * (1. - .025 * uPulse) + vec2(.5, .30);
   float dp = texture(uDepth, uv).r;
   vec2 par = uM * (dp - .4) * vec2(.017, .012);
   float breath = sin(uT * 1.15) * .0014 * smoothstep(.30, .42, uv.y);
@@ -358,40 +333,50 @@ void main(){
   vec2 rad = vec2(25. / 1024., 10.5 / 1536.);
   float mk = (1. - smoothstep(.70, 1., length((u1 - eL) / rad))) + (1. - smoothstep(.70, 1., length((u1 - eR) / rad)));
   vec2 u2 = u1 - uGaze * vec2(6.5 / 1024., 2.6 / 1536.) * mk;
-  vec3 c = texture(uTex, u2).rgb;
-  // light that follows the pointer
+  // intro: rack focus from blurry to sharp
+  float lod = (1. - smoothstep(0., 1., uIntro)) * 3.5;
+  vec4 t = textureLod(uTex, u2, lod);
+  vec3 c = t.rgb; float a = t.a;                       // premultiplied
+  // key light that follows the pointer
   vec2 pd = (uv - uPtr) * vec2(.667, 1.);
-  float L = g(length(pd), .20);
-  c *= 1. + L * .42 * uIntro;
-  c += vec3(1., .70, .60) * L * .035;
-  // glint across the lenses
+  float L = g(length(pd), .22);
+  c *= 1. + L * .30 * uIntro;
+  // rim light on the edge that faces the pointer
+  vec2 d = uPtr - uv; d /= length(d) + 1e-4;
+  float a2 = textureLod(uTex, u1 + d * vec2(.0055, .0037), 0.).a;
+  float rim = a * (1. - a2) * (.20 + .55 * g(length(pd), .5));
+  c += vec3(1., .90, .86) * rim * .55;
+  // glint across the lenses (flares on click)
   vec2 lr = vec2(66. / 1024., 44. / 1536.);
   float lens = max(1. - smoothstep(.8, 1., length((u1 - vec2(425. / 1024., 236. / 1536.)) / lr)),
                    1. - smoothstep(.8, 1., length((u1 - vec2(543. / 1024., 224. / 1536.)) / lr)));
   float s = u1.x * 1024. + u1.y * 1536. * .55 - 300. - uM.x * 60.;
-  c += vec3(1.) * lens * (g(s - 520., 7.) + .45 * g(s - 548., 3.5)) * .30;
-  // light sweep across the blazer
+  c += vec3(1.) * lens * a * (g(s - 520., 7.) + .45 * g(s - 548., 3.5)) * (.28 + 1.4 * uFlare);
+  // slow light sweep across the blazer
   if (uSweep >= 0.) {
     float s2 = uv.x * 1024. - uv.y * 1536. * .30;
     float pos = mix(-500., 1500., uSweep);
     float lum = dot(c, vec3(.30, .59, .11));
-    c += vec3(1., .78, .74) * g(s2 - pos, 70.) * .24 * (.35 + lum * 1.6);
+    c += vec3(1., .80, .76) * g(s2 - pos, 70.) * .20 * (.35 + lum * 1.6) * a;
   }
-  // grade: intro fade-in, vignette, grain, gentle contrast
-  c *= mix(.12, 1., smoothstep(0., 1., uIntro));
-  c *= 1. - .32 * smoothstep(.42, .98, length((uv - .5) * vec2(1., .9) * 1.6));
-  c += uPulse * .10;
-  c = mix(c, c * c * (3. - 2. * c), .12);
-  c = c * (1. - .078) + .078; // lift blacks to the page colour so the portrait melts into it
-  c += (fract(sin(dot(gl_FragCoord.xy + uT * 37., vec2(12.9898, 78.233))) * 43758.5453) - .5) * .028;
-  o = vec4(clamp(c, 0., 1.), 1.);
+  // subject fades in with the focus pull and melts into the page at the bottom
+  float vis = smoothstep(0., .7, uIntro) * smoothstep(1., .80, vUv.y) * smoothstep(0., .035, vUv.x) * smoothstep(1., .965, vUv.x);
+  c *= vis; a *= vis;
+  c += uPulse * .06 * a;
+  // simple, quiet backdrop: page colour with a faint lift behind the head
+  vec2 q = (vUv - vec2(.5, .36)) * vec2(1., .72);
+  vec3 bg = mix(vec3(.078), vec3(.126, .104, .110), exp(-dot(q, q) / (2. * .22 * .22)) * .85);
+  vec3 col = c + bg * (1. - a);
+  col = mix(col, col * col * (3. - 2. * col), .10 * a);
+  col += (fract(sin(dot(gl_FragCoord.xy + uT * 37., vec2(12.9898, 78.233))) * 43758.5453) - .5) * .018 * a;
+  o = vec4(clamp(col, 0., 1.), 1.);
 }`;
     const sh = (type, src) => { const s = gl.createShader(type); gl.shaderSource(s, src); gl.compileShader(s); return s; };
     const prog = gl.createProgram();
     gl.attachShader(prog, sh(gl.VERTEX_SHADER, VS));
     gl.attachShader(prog, sh(gl.FRAGMENT_SHADER, FS));
     gl.linkProgram(prog);
-    if (!gl.getProgramParameter(prog, gl.LINK_STATUS)) { console.warn(gl.getProgramInfoLog(prog)); }
+    if (!gl.getProgramParameter(prog, gl.LINK_STATUS)) console.warn(gl.getProgramInfoLog(prog));
     gl.useProgram(prog);
     const buf = gl.createBuffer();
     gl.bindBuffer(gl.ARRAY_BUFFER, buf);
@@ -400,14 +385,15 @@ void main(){
     gl.enableVertexAttribArray(loc);
     gl.vertexAttribPointer(loc, 2, gl.FLOAT, false, 0, 0);
     const U = n => gl.getUniformLocation(prog, n);
-    const u = { M: U('uM'), Gaze: U('uGaze'), Ptr: U('uPtr'), T: U('uT'), Intro: U('uIntro'), Sweep: U('uSweep'), Pulse: U('uPulse') };
+    const u = { M: U('uM'), Gaze: U('uGaze'), Ptr: U('uPtr'), T: U('uT'), Intro: U('uIntro'), Sweep: U('uSweep'), Pulse: U('uPulse'), Zoom: U('uZoom'), Flare: U('uFlare') };
 
-    const loadTex = (src, unit, mip) => new Promise(res => {
+    const loadTex = (src, unit, mip, premul) => new Promise(res => {
       const img = new Image();
       img.onload = () => {
         const t = gl.createTexture();
         gl.activeTexture(gl.TEXTURE0 + unit);
         gl.bindTexture(gl.TEXTURE_2D, t);
+        gl.pixelStorei(gl.UNPACK_PREMULTIPLY_ALPHA_WEBGL, premul);
         gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, img);
         if (mip) gl.generateMipmap(gl.TEXTURE_2D);
         gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, mip ? gl.LINEAR_MIPMAP_LINEAR : gl.LINEAR);
@@ -422,11 +408,13 @@ void main(){
     gl.uniform1i(U('uTex'), 0);
     gl.uniform1i(U('uDepth'), 1);
 
-    // state
-    let cx = 0, cy = 0, gx = 0, gy = 0, tx = 0, ty = 0, px = 0.5, py = 0.4, tpx = 0.5, tpy = 0.4;
-    let pulse = 0, lockUntil = 0, lastMove = performance.now(), seen = false;
-    let intro = reduceMotion ? 1 : 0, introStart = 0, sweepT = -1, sweepStart = 0;
-    let live = false, visible = false;
+    // ---- state (all motion is time-based)
+    let cx = 0, cy = 0, vx = 0, vy = 0;               // head, a slightly under-damped spring
+    let gx = 0, gy = 0, sacX = 0, sacY = 0, nextSac = 0; // eyes + tiny saccades
+    let tx = 0, ty = 0, px = 0.5, py = 0.4, tpx = 0.5, tpy = 0.4;
+    let pulse = 0, flare = 0, lockUntil = 0, lastMove = performance.now(), seen = false;
+    let intro = reduceMotion ? 1 : 0, introStart = 0, liveAt = 0, sweepT = -1, sweepStart = 0;
+    let live = false, visible = false, lastT = performance.now();
 
     const resize = () => {
       const r = canvas.getBoundingClientRect();
@@ -438,19 +426,32 @@ void main(){
     new ResizeObserver(resize).observe(canvas);
     resize();
 
-    draw = now => {
+    const draw = now => {
+      const dt = Math.min(0.05, Math.max(0.001, (now - lastT) / 1000)); lastT = now;
       const t = now / 1000;
-      if (live && intro < 1) intro = Math.min(1, (now - introStart) / 2200);
-      if (sweepT >= 0) { sweepT = (now - sweepStart) / 2200; if (sweepT > 1) sweepT = -1; }
-      if (pulse > 0) pulse = Math.max(0, pulse - 0.045);
+      if (live && intro < 1) intro = Math.min(1, (now - introStart) / 2600);
+      if (sweepT >= 0) { sweepT = (now - sweepStart) / 2600; if (sweepT > 1) sweepT = -1; }
+      pulse = Math.max(0, pulse - dt * 2.6);
+      flare = Math.max(0, flare - dt * 1.6);
+
       let ttx = tx, tty = ty, tgx = tx, tgy = ty;
-      if (now < lockUntil) { ttx = 0; tty = 0; tgx = 0; tgy = 0; }
-      else if (!seen || now - lastMove > 3500) {
-        ttx = Math.sin(t / 1.9) * 0.7; tty = Math.sin(t / 2.6 + 1) * 0.25; tgx = ttx; tgy = tty;
+      if (now < lockUntil) { ttx = tty = tgx = tgy = 0; }                  // click: looks straight at you
+      else if (!seen || now - lastMove > 3500) {                            // idle: slow look-around
+        ttx = Math.sin(t / 2.1) * 0.62; tty = Math.sin(t / 2.9 + 1) * 0.22; tgx = ttx; tgy = tty;
       }
-      cx += (ttx - cx) * 0.07; cy += (tty - cy) * 0.07;
-      gx += (tgx - gx) * 0.16; gy += (tgy - gy) * 0.16;
-      px += (tpx - px) * 0.15; py += (tpy - py) * 0.15;
+      // head: spring (smooth, with a hint of overshoot)
+      vx += ((ttx - cx) * 150 - vx * 19) * dt; cx += vx * dt;
+      vy += ((tty - cy) * 150 - vy * 19) * dt; cy += vy * dt;
+      // eyes: quicker, with small involuntary jumps
+      if (now > nextSac) { sacX = (Math.random() - 0.5) * 0.28; sacY = (Math.random() - 0.5) * 0.16; nextSac = now + 1100 + Math.random() * 2200; }
+      sacX *= Math.exp(-dt * 2.5); sacY *= Math.exp(-dt * 2.5);
+      const ek = 1 - Math.exp(-dt * 15);
+      gx += (clamp(tgx + sacX, -1, 1) - gx) * ek; gy += (clamp(tgy + sacY, -1, 1) - gy) * ek;
+      const pk = 1 - Math.exp(-dt * 9);
+      px += (tpx - px) * pk; py += (tpy - py) * pk;
+
+      const sinceLive = live ? (now - liveAt) / 1000 : 0;
+      const zoom = 1 + 0.045 * (1 - Math.exp(-sinceLive / 3.4)) + 0.004 * Math.sin(t * 0.35);
       gl.uniform2f(u.M, cx, cy);
       gl.uniform2f(u.Gaze, gx, gy);
       gl.uniform2f(u.Ptr, px, py);
@@ -458,6 +459,8 @@ void main(){
       gl.uniform1f(u.Intro, intro);
       gl.uniform1f(u.Sweep, sweepT);
       gl.uniform1f(u.Pulse, pulse);
+      gl.uniform1f(u.Zoom, zoom);
+      gl.uniform1f(u.Flare, flare);
       gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
     };
 
@@ -470,25 +473,23 @@ void main(){
       lastMove = performance.now(); seen = true;
     };
     onClick = () => {
-      pulse = 1; lockUntil = performance.now() + 1100;
-      say(['Hey, caught you!', 'Boo!', 'Ouch, that tickles!'][Math.floor(Math.random() * 3)]);
-      canvas.animate([{ scale: 1 }, { scale: 1.035 }, { scale: 1 }], { duration: 480, easing: 'cubic-bezier(.2,.8,.2,1)' });
+      pulse = 1; flare = 1; lockUntil = performance.now() + 1200;
+      canvas.animate([{ scale: 1 }, { scale: 1.03 }, { scale: 1 }], { duration: 560, easing: 'cubic-bezier(.2,.8,.2,1)' });
     };
-    sweepNow = () => { sweepT = 0; sweepStart = performance.now(); };
+    flareNow = () => { sweepT = 0; sweepStart = performance.now(); };
 
-    Promise.all([loadTex(canvas.dataset.tex, 0, true), loadTex(canvas.dataset.depth, 1, false)]).then(([a, b]) => {
-      if (!a || !b) { gl.getExtension('WEBGL_lose_context'); canvas.hidden = true; if (fallback) fallback.hidden = false; setupFallback(); return; }
+    Promise.all([loadTex(canvas.dataset.tex, 0, true, true), loadTex(canvas.dataset.depth, 1, false, false)]).then(([a, b]) => {
+      if (!a || !b) { canvas.hidden = true; if (fallback) fallback.hidden = false; setupFallback(); return; }
       canvas.classList.add('ready');
-      if (reduceMotion) { introStart = performance.now(); intro = 1; live = true; stage.classList.add('live'); draw(performance.now()); return; }
+      if (reduceMotion) { live = true; intro = 1; stage.classList.add('live'); draw(performance.now()); return; }
       const loop = now => { if (visible && !document.hidden) draw(now); requestAnimationFrame(loop); };
       requestAnimationFrame(loop);
       const io = new IntersectionObserver(es => {
         visible = es.some(e => e.isIntersecting);
         if (visible && !live) {
-          live = true; introStart = performance.now(); stage.classList.add('live');
-          setTimeout(sweepNow, 1700);
-          setTimeout(() => say('Hi there!'), 2300);
-          setInterval(() => { if (!document.hidden && visible) sweepNow(); }, 11000);
+          live = true; introStart = liveAt = performance.now(); stage.classList.add('live');
+          setTimeout(flareNow, 2200);
+          setInterval(() => { if (!document.hidden && visible) flareNow(); }, 12000);
         }
       }, { threshold: 0.2 });
       io.observe(stage);
@@ -498,27 +499,147 @@ void main(){
     if (fallback) fallback.hidden = false;
   }
 
-  // ---------------- fallback: plain image that tilts (no WebGL2)
+  // ---- fallback: a plain image that tilts (no WebGL2)
   function setupFallback() {
     stage.classList.add('live');
     if (reduceMotion || !fallback) return;
-    onPointer = e => {
+    window.addEventListener('pointermove', e => {
       const r = fallback.getBoundingClientRect();
       const x = clamp((e.clientX - (r.left + r.width * 0.5)) / (r.width * 0.9), -1, 1);
       const y = clamp((e.clientY - (r.top + r.height * 0.25)) / (r.height * 0.6), -1, 1);
       fallback.style.transform = 'perspective(900px) rotateY(' + f(x * 8) + 'deg) rotateX(' + f(-y * 6) + 'deg)';
-    };
-    window.addEventListener('pointermove', onPointer, { passive: true });
+    }, { passive: true });
   }
   if (!gl) setupFallback();
 
   if (!reduceMotion) {
-    window.addEventListener('pointermove', e => { if (onPointer && gl && canvas.classList.contains('ready')) onPointer(e); }, { passive: true });
-    window.addEventListener('pointerleave', () => { if (gl) { /* idle drift takes over */ } });
+    window.addEventListener('pointermove', e => { if (onPointer && canvas.classList.contains('ready')) onPointer(e); }, { passive: true });
     canvas.addEventListener('click', () => { if (onClick) onClick(); });
-    canvas.addEventListener('pointerenter', () => { if (finePointer) say('Hi there!'); });
   }
+  stage._akiClick = () => { if (onClick) onClick(); };
 });
+
+// ---- AKI-9: the avatar's chat box. It introduces itself, then reacts to the cursor ----
+(() => {
+  const stage = document.querySelector('.avatar-stage');
+  const box = stage && stage.querySelector('.aki');
+  if (!box) return;
+  const log = box.querySelector('.aki-log');
+  const hx = box.querySelector('[data-x]'), hy = box.querySelector('[data-y]'), hth = box.querySelector('[data-th]');
+  const canvas = stage.querySelector('.avatar-canvas') || stage.querySelector('.avatar-fallback');
+  const pick = a => a[Math.floor(Math.random() * a.length)];
+  const sleep = ms => new Promise(r => setTimeout(r, ms));
+
+  // ---- typing engine: one line at a time, last three stay on screen
+  let busy = false, lastSay = 0, introDone = false;
+  const type = async (text, cls) => {
+    const p = document.createElement('p');
+    if (cls) p.className = cls;
+    log.appendChild(p);
+    while (log.children.length > 3) log.removeChild(log.firstChild);
+    const pre = document.createElement('span'); pre.textContent = cls === 'sys' ? '# ' : '> ';
+    const body = document.createElement('span');
+    const caret = document.createElement('span'); caret.className = 'aki-caret';
+    p.append(pre, body, caret);
+    if (reduceMotion) { body.textContent = text; caret.remove(); return; }
+    for (let i = 0; i < text.length; i++) {
+      body.textContent += text[i];
+      await sleep(/[.,?!]/.test(text[i]) ? 90 : 20 + Math.random() * 16);
+    }
+    await sleep(250);
+    caret.remove();
+  };
+  const say = async (text, prio = 1, cls) => {
+    const now = performance.now();
+    if (busy || (prio < 2 && now - lastSay < 3000) || (prio < 3 && !introDone)) return;
+    busy = true; lastSay = now;
+    await type(text, cls);
+    busy = false; lastSay = performance.now();
+  };
+
+  // ---- introduction (starts when the stage scrolls into view)
+  const intro = async () => {
+    await sleep(900);
+    busy = true;
+    await type('booting AKI-9 ... ok', 'sys');
+    await sleep(500);
+    await type("Hi. I'm AKI-9, the AI twin of Akibur Rahman.");
+    await sleep(650);
+    await type('He studies CSE at AIUB and is going deep into cyber security. I run when he is offline.');
+    await sleep(650);
+    await type("Move your cursor. I'll tell you what I see.");
+    busy = false; introDone = true; lastSay = performance.now();
+  };
+  if ('IntersectionObserver' in window) {
+    const io = new IntersectionObserver(es => { if (es.some(e => e.isIntersecting)) { io.disconnect(); intro(); } }, { threshold: 0.25 });
+    io.observe(stage);
+  } else intro();
+
+  // ---- cursor reading: direction, speed, idle, leaving, links
+  const SECTORS = {
+    E:  ['East side: nothing there but the scrollbar. I checked.', 'Right edge. Dead end. Even I am not that secluded.'],
+    NE: ['Top-right. Your profile chip lives up there.', 'North-east. Switching profiles? I support all four.'],
+    N:  ['Looking up? The menu is there. Skills, Projects, Resume.', 'Heading north. Click Resume if you are hiring.'],
+    NW: ['Top-left. The AKIBUR logo takes you home.', 'North-west. That logo is a very good home button.'],
+    W:  ["Cursor west. That's where the links are. Email is the fastest.", 'Going left? Good call. The contact links live there.'],
+    SW: ['South-west. Instagram lives down there.', 'Bottom-left. The links keep going, scroll a bit.'],
+    S:  ['Heading south. More links below. Keep scrolling.', 'Down there? Only my belt. Please look away.'],
+    SE: ["Bottom-right. You're near my watch. Real one, by the way.", 'South-east. Nothing classified here.']
+  };
+  const LINKS = [
+    [/mailto:/, ['Email: Akibur replies fastest here.', 'Email it is. Subject lines with "hire" get read first.']],
+    [/linkedin/, ['LinkedIn. Professional mode. Blazer on.', 'LinkedIn: the formal version of him.']],
+    [/github/, ['GitHub: where the code lives. Inspect away. Responsibly.', 'GitHub. Fork nicely.']],
+    [/tel:/, ['A real phone call. Bold. I respect it.']],
+    [/wa\.me/, ['WhatsApp works too. No spam, I promise.']],
+    [/instagram/, ['Instagram: the unclassified side of him.']]
+  ];
+  let lastSector = '', sectorSince = 0, lastX = 0, lastY = 0, lastT = performance.now(), speed = 0, shownTh = '';
+  let lastMove = performance.now(), idleLevel = 0, gone = false;
+
+  window.addEventListener('pointermove', e => {
+    const now = performance.now(), dt = Math.max(8, now - lastT);
+    const v = Math.hypot(e.clientX - lastX, e.clientY - lastY) / dt;
+    speed += (v - speed) * 0.25;
+    lastX = e.clientX; lastY = e.clientY; lastT = now; lastMove = now; idleLevel = 0;
+    if (gone) { gone = false; say('Welcome back, human.', 2); }
+    const r = canvas.getBoundingClientRect();
+    const dx = e.clientX - (r.left + r.width * 0.48), dy = e.clientY - (r.top + r.height * 0.17);
+    const dist = Math.hypot(dx, dy);
+    if (hx) { hx.textContent = (clamp(dx / (r.width * 0.9), -1, 1) >= 0 ? '+' : '') + clamp(dx / (r.width * 0.9), -1, 1).toFixed(2); }
+    if (hy) { hy.textContent = (clamp(dy / (r.height * 0.5), -1, 1) >= 0 ? '+' : '') + clamp(dy / (r.height * 0.5), -1, 1).toFixed(2); }
+    if (speed > 2.6) { say(pick(['Whoa. Slow down. I am rate-limiting you.', 'Cursor velocity: suspicious. Logging it.']), 1); return; }
+    if (e.target.closest && e.target.closest('.avatar-canvas')) {
+      const face = Math.hypot(dx, dy) < r.width * 0.16;
+      if (face) { say('Eye contact detected. Bold of you.', 1); return; }
+    }
+    if (dist > r.width * 0.55) {
+      const ang = Math.atan2(-dy, dx) * 180 / Math.PI;           // 0 = east, 90 = north
+      const sec = ['E', 'NE', 'N', 'NW', 'W', 'SW', 'S', 'SE'][Math.round(((ang + 360) % 360) / 45) % 8];
+      if (sec !== lastSector) { lastSector = sec; sectorSince = now; }
+      else if (now - sectorSince > 450) { say(pick(SECTORS[sec]), 1); sectorSince = now + 4000; }
+    } else if (dist < r.width * 0.55 && lastSector !== 'near') { lastSector = 'near'; sectorSince = now; }
+  }, { passive: true });
+
+  document.querySelectorAll('.links a').forEach(a => {
+    a.addEventListener('pointerenter', () => {
+      const m = LINKS.find(([re]) => re.test(a.getAttribute('href') || ''));
+      if (m) say(pick(m[1]), 2);
+    });
+  });
+  canvas.addEventListener('click', () => say(pick(['Ouch. Please do not pen-test me.', 'Access denied. Kidding. Hi!', 'That tickles. Logging it anyway.']), 3));
+  document.documentElement.addEventListener('pointerleave', () => { if (!gone) { gone = true; say('Connection lost ... I will wait.', 2); } });
+
+  // threat meter and idle check, ten times a second
+  setInterval(() => {
+    speed *= 0.82;
+    const th = speed > 2.2 ? 'high' : speed > 0.9 ? 'med' : 'low';
+    if (hth && th !== shownTh) { shownTh = th; hth.textContent = th.toUpperCase(); hth.className = 'th-' + th; }
+    const idle = performance.now() - lastMove;
+    if (introDone && idle > 7000 && idleLevel === 0) { idleLevel = 1; say('No input for 7s. Are you still human? Wiggle the mouse if so.', 2); }
+    else if (introDone && idle > 22000 && idleLevel === 1) { idleLevel = 2; say('Still here. I will keep the lights on.', 2); }
+  }, 100);
+})();
 
 // ---- About: 360 degree ring ------------------------------------------
 (() => {

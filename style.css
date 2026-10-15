@@ -441,26 +441,10 @@ a.pill:hover{background:#3a3a3a}
 .contact-grid{display:grid; grid-template-columns:minmax(0, 1.1fr) minmax(280px, 440px); gap:24px 56px; align-items:start}
 .contact-grid .links{order:1}
 .avatar-stage{order:2; position:sticky; top:96px; display:grid; justify-items:center}
-.avatar-glow{
-  position:absolute; inset:4% 2% 12%; border-radius:50%; pointer-events:none;
-  background:radial-gradient(circle at 50% 42%, rgba(229,9,20,.5), rgba(229,9,20,0) 68%);
-}
 .avatar-canvas{
-  position:relative; z-index:1; display:block; width:100%; max-width:460px; aspect-ratio:2 / 3; height:auto; cursor:pointer;
+  position:relative; z-index:1; display:block; width:100%; max-width:420px; aspect-ratio:2 / 3; height:auto; cursor:pointer;
 }
-.avatar-canvas, .avatar-fallback{
-  -webkit-mask-image:linear-gradient(180deg, transparent 0, #000 6%, #000 80%, transparent 100%), linear-gradient(90deg, transparent 0, #000 10%, #000 90%, transparent 100%);
-  mask-image:linear-gradient(180deg, transparent 0, #000 6%, #000 80%, transparent 100%), linear-gradient(90deg, transparent 0, #000 10%, #000 90%, transparent 100%);
-  -webkit-mask-composite:source-in; mask-composite:intersect;
-}
-.avatar-fallback{position:relative; z-index:1; width:100%; max-width:460px; height:auto}
-.avatar-bubble{
-  position:absolute; top:4%; right:0; z-index:2; padding:8px 14px; border-radius:14px 14px 14px 2px;
-  background:#fff; color:#111; font-weight:700; font-size:14px; pointer-events:none;
-  opacity:0; translate:0 8px; transition:opacity .25s ease, translate .25s ease;
-}
-.avatar-bubble.show{opacity:1; translate:0 0}
-.avatar-hint{margin:6px 0 0; color:var(--muted); font-size:13px}
+.avatar-fallback{position:relative; z-index:1; width:100%; max-width:420px; height:auto}
 
 /* About: 360 degree ring */
 .ring-scene{
@@ -565,14 +549,8 @@ a.pill:hover{background:#3a3a3a}
   }
 
   /* contact avatar: breathing, blinking, glow */
-  .avatar-canvas{animation:bob 6s ease-in-out infinite}
   .av-lid{animation:blink 5.5s infinite}
-  .avatar-glow{animation:glowPulse 4s ease-in-out infinite alternate}
-
-  /* leaving a page */
-  body.leaving{opacity:0; transition:opacity .2s ease}
-}
-@media print{.js .reveal, .js .row .tile, .js .row .row-title{opacity:1 !important}}
+  @media print{.js .reveal, .js .row .tile, .js .row .row-title{opacity:1 !important}}
 
 /* ---------- Footer ---------- */
 .footer{padding:48px var(--gutter) 64px; color:var(--muted); font-size:14px; margin-top:clamp(24px, 4vw, 56px)}
@@ -692,42 +670,35 @@ a.pill:hover{background:#3a3a3a}
 .nav-avatar svg{display:block; width:100%; height:100%}
 .nav-profile:hover .nav-avatar{outline:2px solid #fff}
 
-/* ---------- Contact avatar: cinematic stage ---------- */
-.avatar-stage{isolation:isolate}
-.avatar-beam{
-  position:absolute; z-index:0; top:-8%; left:50%; width:92%; height:96%; translate:-50% 0; pointer-events:none; opacity:0;
-  background:linear-gradient(180deg, rgba(255,226,226,.30), rgba(255,226,226,0) 78%);
-  clip-path:polygon(38% 0, 62% 0, 100% 100%, 0 100%); filter:blur(16px);
-  -webkit-mask-image:linear-gradient(180deg, transparent 0, #000 30%, #000 55%, transparent 100%); mask-image:linear-gradient(180deg, transparent 0, #000 30%, #000 55%, transparent 100%);
-}
-.avatar-dust{position:absolute; inset:0; z-index:0; pointer-events:none; overflow:hidden}
-.avatar-dust i{
-  position:absolute; left:var(--x); bottom:var(--y); width:var(--s); height:var(--s); border-radius:50%;
-  background:rgba(255,214,214,.85); box-shadow:0 0 8px rgba(255,120,120,.7); opacity:0;
-}
-.avatar-spot{
-  position:absolute; inset:0; z-index:2; pointer-events:none; mix-blend-mode:screen; opacity:0; transition:opacity .4s ease;
-  background:radial-gradient(260px 260px at var(--lx, 50%) var(--ly, 40%), rgba(255,255,255,.14), rgba(255,255,255,0) 70%);
-}
-.avatar-stage.live .avatar-spot{opacity:1}
-@keyframes camIn{
-  from{opacity:0; filter:blur(16px) brightness(.4); scale:1.08; translate:0 28px}
-  60%{filter:blur(2px) brightness(.9)}
-  to{opacity:1; filter:none; scale:1; translate:0 0}
-}
-@keyframes beamIn{0%{opacity:0; scale:1 .6} 35%{opacity:1} 100%{opacity:.55; scale:1 1}}
-@keyframes dust{
-  0%{opacity:0; translate:0 0}
-  15%{opacity:.9}
-  100%{opacity:0; translate:var(--dx) -260px}
-}
+/* ---------- Contact avatar: quiet stage + AKI-9 chat ---------- */
+.avatar-stage{isolation:isolate; gap:0}
+@keyframes camIn{from{opacity:0; scale:1.025} to{opacity:1; scale:1}}
 @media (prefers-reduced-motion: no-preference){
   .js .avatar-stage .avatar-canvas{opacity:0}
-  .js .avatar-stage.live .avatar-canvas{animation:camIn 1.8s var(--ease) .25s both, bob 6s ease-in-out 2.2s infinite}
-  .js .avatar-stage.live .avatar-beam{animation:beamIn 2.2s ease .05s both}
-  .js .avatar-stage.live .avatar-glow{animation:glowPulse 4s ease-in-out infinite alternate}
-  .js .avatar-stage.live .avatar-dust i{animation:dust var(--t) ease-in var(--d) infinite}
-  .js .avatar-stage .avatar-hint{opacity:0; transition:opacity .8s ease 2.4s}
-  .js .avatar-stage.live .avatar-hint{opacity:1}
+  .js .avatar-stage.live .avatar-canvas{animation:camIn 1.6s var(--ease) .1s both}
 }
-@media (prefers-reduced-motion: reduce){.avatar-beam{opacity:.5}}
+.aki{
+  position:relative; z-index:3; width:100%; max-width:420px; margin-top:-34px; padding:12px 14px 10px;
+  border-radius:12px; background:rgba(22,22,22,.78); border:1px solid rgba(255,255,255,.09);
+  -webkit-backdrop-filter:blur(10px); backdrop-filter:blur(10px);
+  font:12.5px/1.5 ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace; color:#dcdcdc; text-align:left;
+}
+.aki-head{display:flex; align-items:center; gap:8px; padding-bottom:8px; margin-bottom:8px; border-bottom:1px solid rgba(255,255,255,.08); font-size:11.5px; color:var(--muted)}
+.aki-head b{color:#fff; letter-spacing:.1em; font-weight:700}
+.aki-dot{width:7px; height:7px; border-radius:50%; background:#46d369; box-shadow:0 0 0 3px rgba(70,211,105,.14)}
+.aki-log{min-height:6.1em; display:flex; flex-direction:column; justify-content:flex-end; gap:3px}
+.aki-log p{margin:0; overflow-wrap:anywhere}
+.aki-log p:nth-last-child(2){opacity:.62}
+.aki-log p:nth-last-child(n+3){opacity:.36}
+.aki-log .sys{color:#7d838d}
+.aki-caret{display:inline-block; width:.55em; height:1.05em; background:#e5e5e5; vertical-align:-.18em; margin-left:2px}
+.aki-hud{display:flex; justify-content:space-between; gap:10px; margin-top:8px; padding-top:7px; border-top:1px solid rgba(255,255,255,.08); font-size:11px; letter-spacing:.06em; color:#7d838d}
+.aki-hud i{font-style:normal; color:#cfcfcf}
+.aki-hud .th-low{color:#46d369} .aki-hud .th-med{color:#d4a53a} .aki-hud .th-high{color:#e50914}
+@media (prefers-reduced-motion: no-preference){
+  .aki-caret{animation:akiCaret 1s steps(1) infinite}
+  .aki-dot{animation:akiDot 2.4s ease-in-out infinite}
+}
+@keyframes akiCaret{50%{opacity:0}}
+@keyframes akiDot{50%{opacity:.45}}
+@media (max-width: 720px){.aki{max-width:360px}}
