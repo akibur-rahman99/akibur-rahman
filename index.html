@@ -4,19 +4,16 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Akibur Rahman | Portfolio</title>
-  <meta name="description" content="Akibur Rahman — CSE student and future game developer. Photo, bio, resume, skills, projects, and contact." />
+  <meta name="description" content="Akibur Rahman, CSE student with a cyber security major. Projects, skills, resume, and contact." />
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,500..900&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="./style.css" />
 </head>
 <body data-page="home">
   <header class="nav">
     <div class="container nav-inner">
-      <a class="brand" href="index.html" aria-label="Home">
-        <span class="brand-mark">AR</span>
-        <span class="brand-text">Akibur Rahman</span>
-      </a>
+      <a class="brand" href="index.html" aria-label="Home">Akibur Rahman</a>
 
       <button class="nav-toggle" aria-label="Open menu" aria-expanded="false">
         <span></span><span></span><span></span>
@@ -34,87 +31,62 @@
     </div>
   </header>
 
-  <main id="home">
+  <main>
     <section class="hero">
       <div class="container hero-grid">
         <div class="hero-left">
-          <p class="chip">CSE Student • Future Game Developer</p>
-          <h1 class="hero-title">
-            Hello, I'm <span class="accent">Akibur Rahman</span>
-          </h1>
+          <h1 class="hero-title">Akibur<br />Rahman</h1>
           <p class="hero-sub">
-            I’m passionate about technology and game development. I build clean, practical projects and love learning new tools.
+            CSE student at AIUB with a cyber security major. I'm learning how systems
+            <span class="redact">break</span> and how to
+            <span class="redact" style="--d:.9s">keep them safe</span>.
           </p>
-
           <div class="hero-cta">
-            <a class="btn" href="resume.html">View Resume</a>
-            <a class="btn ghost" href="projects.html">View Projects</a>
+            <a class="btn" href="projects.html">See projects</a>
+            <a class="btn ghost" href="resume.html">Read resume</a>
           </div>
-
-          <div class="hero-meta">
-            <div class="meta-card">
-              <div class="meta-k">Location</div>
-              <div class="meta-v">Dhaka, Bangladesh</div>
-            </div>
-            <div class="meta-card">
-              <div class="meta-k">Blood Group</div>
-              <div class="meta-v">A+</div>
-            </div>
-            <div class="meta-card">
-              <div class="meta-k">Email</div>
-              <div class="meta-v"><a href="mailto:akibrr239@gmail.com">akibrr239@gmail.com</a></div>
-            </div>
-          </div>
+          <p class="hero-links">
+            <a href="mailto:akibrr239@gmail.com">akibrr239@gmail.com</a>
+            <a href="https://github.com/akibur-rahman99" target="_blank" rel="noreferrer">GitHub</a>
+            <a href="https://www.linkedin.com/in/akibur-rahman-51aa00388" target="_blank" rel="noreferrer">LinkedIn</a>
+          </p>
         </div>
 
         <div class="hero-right">
           <div class="photo-wrap">
             <img src="./assets/profile.jpg" alt="Akibur Rahman" class="photo" />
-            <div class="ring"></div>
-            <div class="float-card fc1">
-              <div class="fc-title">Main Focus</div>
-              <div class="fc-text">Game Dev • C++ • Java • C# </div>
-            </div>
           </div>
         </div>
       </div>
-      <div class="bg-blur b1"></div>
-      <div class="bg-blur b2"></div>
     </section>
 
     <section class="section">
       <div class="container">
         <div class="section-head">
-          <h2 class="section-title">Explore</h2>
-          <p class="muted">A quick look around the portfolio.</p>
+          <h2 class="section-title">Selected projects</h2>
+          <a class="text-link" href="projects.html">All projects</a>
         </div>
-
-        <div class="grid-3">
-          <a class="card quick-card" href="about.html">
-            <h3 class="card-title">About Me <span class="quick-arrow">→</span></h3>
-            <p class="p muted">My story and key attributes.</p>
-          </a>
-          <a class="card quick-card" href="skills.html">
-            <h3 class="card-title">Skills <span class="quick-arrow">→</span></h3>
-            <p class="p muted">Programming, web, tools, and soft skills.</p>
-          </a>
-          <a class="card quick-card" href="projects.html">
-            <h3 class="card-title">Projects <span class="quick-arrow">→</span></h3>
-            <p class="p muted">Academic and practical builds I’ve worked on.</p>
-          </a>
-          <a class="card quick-card" href="education.html">
-            <h3 class="card-title">Education <span class="quick-arrow">→</span></h3>
-            <p class="p muted">Academic background and current status.</p>
-          </a>
-          <a class="card quick-card" href="achievements.html">
-            <h3 class="card-title">Achievements <span class="quick-arrow">→</span></h3>
-            <p class="p muted">Awards, certificates, and volunteer activities.</p>
-          </a>
-          <a class="card quick-card" href="resume.html">
-            <h3 class="card-title">Resume <span class="quick-arrow">→</span></h3>
-            <p class="p muted">Full profile with a downloadable PDF.</p>
-          </a>
+      <a class="project" href="projects.html">
+        <div class="project-tags"><span>C++</span><span>OpenGL / Graphics</span></div>
+        <div>
+          <h3 class="project-title">Journey by Bus</h3>
+          <p class="project-desc">A four-scene interactive computer graphics application with bus and vehicle movement and real-time wind and rain. Mouse and keyboard controls move the camera and objects.</p>
         </div>
+      </a>
+      <a class="project" href="projects.html">
+        <div class="project-tags"><span>Java</span><span>Management system</span></div>
+        <div>
+          <h3 class="project-title">Hospital Management System</h3>
+          <p class="project-desc">Built to streamline hospital operations and help staff manage tasks with a smoother workflow.</p>
+        </div>
+      </a>
+      <a class="project" href="projects.html">
+        <div class="project-tags"><span>C#</span><span>University</span></div>
+        <div>
+          <h3 class="project-title">University Management System</h3>
+          <p class="project-desc">Admin system for student, teacher and staff data, fee records, CGPA view, and controlled data entry and removal.</p>
+        </div>
+      </a>
       </div>
     </section>
   </main>
