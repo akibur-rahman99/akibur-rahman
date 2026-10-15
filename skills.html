@@ -3,82 +3,81 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="theme-color" content="#141414" />
   <title>Skills | Akibur Rahman</title>
   <meta name="description" content="Security focus, programming languages, tools, and soft skills." />
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,500..900&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="./style.css" />
 </head>
 <body data-page="skills">
   <header class="nav">
-    <div class="container nav-inner">
-      <a class="brand" href="index.html" aria-label="Home">Akibur Rahman</a>
+    <div class="nav-inner">
+      <a class="brand" href="browse.html" aria-label="Akibur Rahman, home">AKIBUR</a>
 
-      <button class="nav-toggle" aria-label="Open menu" aria-expanded="false">
-        <span></span><span></span><span></span>
-      </button>
-
-      <nav class="nav-links" aria-label="Primary">
+      <nav class="nav-links" id="site-nav" aria-label="Primary">
+        <a href="browse.html" data-page="browse">Home</a>
         <a href="about.html" data-page="about">About</a>
         <a href="skills.html" data-page="skills">Skills</a>
         <a href="projects.html" data-page="projects">Projects</a>
         <a href="education.html" data-page="education">Education</a>
         <a href="achievements.html" data-page="achievements">Achievements</a>
         <a href="resume.html" data-page="resume">Resume</a>
-        <a href="contact.html" class="btn" data-page="contact">Contact</a>
+        <a href="contact.html" data-page="contact">Contact</a>
       </nav>
+
+      <a class="nav-profile" href="index.html" aria-label="Switch profile">
+        <span class="nav-avatar"></span>
+        <span class="nav-profile-name">Guest</span>
+      </a>
+
+      <button class="nav-toggle" aria-label="Open menu" aria-expanded="false" aria-controls="site-nav">
+        <span></span><span></span><span></span>
+      </button>
     </div>
   </header>
 
   <main>
     <div class="container page-head">
-      <h1 class="page-title">Skills</h1>
-      <p class="page-sub">Languages, tools, and what I bring to a team.</p>
+      <h1 class="page-title">My skill universe</h1>
+      <p class="page-sub">Pick a genre to see what is inside.</p>
     </div>
 
     <section class="section">
-      <div class="container">
-        <div class="dossier">
-          <div class="dossier-label">Security</div>
-          <div class="dossier-body">
-            <ul class="plain"><li>Cyber security major, AIUB</li></ul>
-          </div>
+      <div class="container uni">
+        <div class="uni-tabs" role="tablist" aria-label="Skill genres">
+          <button type="button" class="uni-tab" data-tab="0" aria-selected="true"><span class="uni-tab-name">Security</span><span class="uni-tab-sub">Cyber security major, AIUB</span></button>
+          <button type="button" class="uni-tab" data-tab="1" aria-selected="false"><span class="uni-tab-name">Languages</span><span class="uni-tab-sub">C++, C# and Java</span></button>
+          <button type="button" class="uni-tab" data-tab="2" aria-selected="false"><span class="uni-tab-name">Web</span><span class="uni-tab-sub">The front end</span></button>
+          <button type="button" class="uni-tab" data-tab="3" aria-selected="false"><span class="uni-tab-name">Version control</span><span class="uni-tab-sub">Git and GitHub</span></button>
+          <button type="button" class="uni-tab" data-tab="4" aria-selected="false"><span class="uni-tab-name">Tools</span><span class="uni-tab-sub">Day-to-day software</span></button>
+          <button type="button" class="uni-tab" data-tab="5" aria-selected="false"><span class="uni-tab-name">People</span><span class="uni-tab-sub">Soft skills</span></button>
         </div>
-        <div class="dossier">
-          <div class="dossier-label">Programming</div>
-          <div class="dossier-body">
-            <ul class="plain"><li>C++</li><li>C#</li><li>Java</li></ul>
+        <div class="uni-panels">
+          <div class="uni-panel" data-panel="0">
+            <h2 class="uni-panel-title">Security</h2>
+            <div class="uni-chips"><span class="uni-chip">Cyber security major</span><span class="uni-chip">BSc in CSE, AIUB</span></div>
           </div>
-        </div>
-        <div class="dossier">
-          <div class="dossier-label">Web development</div>
-          <div class="dossier-body">
-            <ul class="plain"><li>HTML</li><li>CSS</li><li>React JS</li></ul>
+          <div class="uni-panel" data-panel="1">
+            <h2 class="uni-panel-title">Languages</h2>
+            <div class="uni-chips"><span class="uni-chip">C++</span><span class="uni-chip">C#</span><span class="uni-chip">Java</span></div>
           </div>
-        </div>
-        <div class="dossier">
-          <div class="dossier-label">Version control</div>
-          <div class="dossier-body">
-            <ul class="plain"><li>Git</li><li>GitHub</li></ul>
+          <div class="uni-panel" data-panel="2">
+            <h2 class="uni-panel-title">Web</h2>
+            <div class="uni-chips"><span class="uni-chip">HTML</span><span class="uni-chip">CSS</span><span class="uni-chip">React JS</span></div>
           </div>
-        </div>
-        <div class="dossier">
-          <div class="dossier-label">Tools</div>
-          <div class="dossier-body">
-            <ul class="plain"><li>MS Word, Excel, PowerPoint</li><li>Canva</li><li>AI-assisted dev tools</li></ul>
+          <div class="uni-panel" data-panel="3">
+            <h2 class="uni-panel-title">Version control</h2>
+            <div class="uni-chips"><span class="uni-chip">Git</span><span class="uni-chip">GitHub</span></div>
           </div>
-        </div>
-        <div class="dossier">
-          <div class="dossier-label">Soft skills</div>
-          <div class="dossier-body">
-            <ul class="plain cols">
-              <li>Communication</li>
-              <li>Teamwork &amp; leadership</li>
-              <li>Problem solving</li>
-              <li>Event management</li>
-              <li>Volunteer coordination</li>
-            </ul>
+          <div class="uni-panel" data-panel="4">
+            <h2 class="uni-panel-title">Tools</h2>
+            <div class="uni-chips"><span class="uni-chip">MS Word</span><span class="uni-chip">Excel</span><span class="uni-chip">PowerPoint</span><span class="uni-chip">Canva</span><span class="uni-chip">AI-assisted dev tools</span></div>
+          </div>
+          <div class="uni-panel" data-panel="5">
+            <h2 class="uni-panel-title">People</h2>
+            <div class="uni-chips"><span class="uni-chip">Communication</span><span class="uni-chip">Teamwork &amp; leadership</span><span class="uni-chip">Problem solving</span><span class="uni-chip">Event management</span><span class="uni-chip">Volunteer coordination</span></div>
           </div>
         </div>
       </div>
@@ -86,12 +85,13 @@
   </main>
 
   <footer class="footer">
-    <div class="container footer-inner">
+    <div class="footer-inner">
       <div>© <span id="year"></span> Akibur Rahman</div>
       <div class="footer-links">
-        <a href="index.html">Top</a>
+        <a href="browse.html">Home</a>
         <a href="projects.html">Projects</a>
         <a href="contact.html">Contact</a>
+        <a href="index.html">Switch profile</a>
       </div>
     </div>
   </footer>

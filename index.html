@@ -3,107 +3,44 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Akibur Rahman | Portfolio</title>
-  <meta name="description" content="Akibur Rahman, CSE student with a cyber security major. Projects, skills, resume, and contact." />
+  <meta name="theme-color" content="#141414" />
+  <title>Akibur Rahman | Who's watching?</title>
+  <meta name="description" content="Akibur Rahman, CSE student with a cyber security major. Pick a profile to browse the portfolio." />
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,500..900&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="./style.css" />
 </head>
-<body data-page="home">
-  <header class="nav">
-    <div class="container nav-inner">
-      <a class="brand" href="index.html" aria-label="Home">Akibur Rahman</a>
-
-      <button class="nav-toggle" aria-label="Open menu" aria-expanded="false">
-        <span></span><span></span><span></span>
-      </button>
-
-      <nav class="nav-links" aria-label="Primary">
-        <a href="about.html" data-page="about">About</a>
-        <a href="skills.html" data-page="skills">Skills</a>
-        <a href="projects.html" data-page="projects">Projects</a>
-        <a href="education.html" data-page="education">Education</a>
-        <a href="achievements.html" data-page="achievements">Achievements</a>
-        <a href="resume.html" data-page="resume">Resume</a>
-        <a href="contact.html" class="btn" data-page="contact">Contact</a>
-      </nav>
-    </div>
+<body class="chooser-body" data-page="chooser">
+  <header class="chooser-top">
+    <a class="brand" href="index.html" aria-label="Akibur Rahman">AKIBUR</a>
   </header>
-
-  <main>
-    <section class="hero">
-      <div class="container hero-grid">
-        <div class="hero-left">
-          <h1 class="hero-title">Akibur<br />Rahman</h1>
-          <p class="hero-sub">
-            CSE student at AIUB with a cyber security major. I'm learning how systems
-            <span class="redact">break</span> and how to
-            <span class="redact" style="--d:.9s">keep them safe</span>.
-          </p>
-          <div class="hero-cta">
-            <a class="btn" href="projects.html">See projects</a>
-            <a class="btn ghost" href="resume.html">Read resume</a>
-          </div>
-          <p class="hero-links">
-            <a href="mailto:akibrr239@gmail.com">akibrr239@gmail.com</a>
-            <a href="https://github.com/akibur-rahman99" target="_blank" rel="noreferrer">GitHub</a>
-            <a href="https://www.linkedin.com/in/akibur-rahman-51aa00388" target="_blank" rel="noreferrer">LinkedIn</a>
-          </p>
-        </div>
-
-        <div class="hero-right">
-          <div class="photo-frame">
-            <div class="photo-wrap">
-              <img src="./assets/profile.jpg" alt="Akibur Rahman" class="photo" />
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <section class="section">
-      <div class="container">
-        <div class="section-head">
-          <h2 class="section-title">Selected projects</h2>
-          <a class="text-link" href="projects.html">All projects</a>
-        </div>
-      <a class="project" href="projects.html">
-        <div class="project-tags"><span>C++</span><span>OpenGL / Graphics</span></div>
-        <div>
-          <h3 class="project-title">Journey by Bus</h3>
-          <p class="project-desc">A four-scene interactive computer graphics application with bus and vehicle movement and real-time wind and rain. Mouse and keyboard controls move the camera and objects.</p>
-        </div>
-      </a>
-      <a class="project" href="projects.html">
-        <div class="project-tags"><span>Java</span><span>Management system</span></div>
-        <div>
-          <h3 class="project-title">Hospital Management System</h3>
-          <p class="project-desc">Built to streamline hospital operations and help staff manage tasks with a smoother workflow.</p>
-        </div>
-      </a>
-      <a class="project" href="projects.html">
-        <div class="project-tags"><span>C#</span><span>University</span></div>
-        <div>
-          <h3 class="project-title">University Management System</h3>
-          <p class="project-desc">Admin system for student, teacher and staff data, fee records, CGPA view, and controlled data entry and removal.</p>
-        </div>
-      </a>
-      </div>
-    </section>
+  <main class="chooser-main">
+    <h1 class="chooser-title">Who's watching?</h1>
+    <nav class="profiles" aria-label="Choose a profile">
+        <a class="profile" href="browse.html?as=recruiter">
+          <span class="profile-avatar"><svg viewBox="0 0 100 100" aria-hidden="true" focusable="false"><rect width="100" height="100" fill="#2f80ed"/><circle cx="50" cy="40" r="17" fill="rgba(255,255,255,.92)"/><path d="M18 92c2-22 16-32 32-32s30 10 32 32z" fill="rgba(255,255,255,.92)"/></svg></span>
+          <span class="profile-name">Recruiter</span>
+          <span class="profile-tag">Education and skills first</span>
+        </a>
+        <a class="profile" href="browse.html?as=developer">
+          <span class="profile-avatar"><svg viewBox="0 0 100 100" aria-hidden="true" focusable="false"><rect width="100" height="100" fill="#e50914"/><rect x="33" y="23" width="34" height="34" rx="6" fill="rgba(255,255,255,.92)"/><path d="M18 92c2-22 16-32 32-32s30 10 32 32z" fill="rgba(255,255,255,.92)"/></svg></span>
+          <span class="profile-name">Developer</span>
+          <span class="profile-tag">Projects and stack first</span>
+        </a>
+        <a class="profile" href="browse.html?as=collaborator">
+          <span class="profile-avatar"><svg viewBox="0 0 100 100" aria-hidden="true" focusable="false"><rect width="100" height="100" fill="#f5a524"/><circle cx="50" cy="40" r="17" fill="none" stroke="rgba(255,255,255,.92)" stroke-width="7"/><path d="M18 92c2-22 16-32 32-32s30 10 32 32z" fill="rgba(255,255,255,.92)"/></svg></span>
+          <span class="profile-name">Collaborator</span>
+          <span class="profile-tag">Moments and contact first</span>
+        </a>
+        <a class="profile" href="browse.html?as=guest">
+          <span class="profile-avatar"><svg viewBox="0 0 100 100" aria-hidden="true" focusable="false"><rect width="100" height="100" fill="#2ecc71"/><path d="M50 20 70 54H30z" fill="rgba(255,255,255,.92)"/><path d="M18 92c2-22 16-32 32-32s30 10 32 32z" fill="rgba(255,255,255,.92)"/></svg></span>
+          <span class="profile-name">Guest</span>
+          <span class="profile-tag">The full series, in order</span>
+        </a>
+    </nav>
+    <p class="chooser-note">Every profile sees the same real information. It only changes what plays first.</p>
   </main>
-
-  <footer class="footer">
-    <div class="container footer-inner">
-      <div>© <span id="year"></span> Akibur Rahman</div>
-      <div class="footer-links">
-        <a href="index.html">Top</a>
-        <a href="projects.html">Projects</a>
-        <a href="contact.html">Contact</a>
-      </div>
-    </div>
-  </footer>
-
   <script src="./script.js"></script>
 </body>
 </html>

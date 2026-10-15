@@ -1,0 +1,234 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="theme-color" content="#141414" />
+  <title>Akibur Rahman | Portfolio</title>
+  <meta name="description" content="Akibur Rahman, CSE student with a cyber security major. Projects, skills, resume, and contact." />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="./style.css" />
+</head>
+<body data-page="browse">
+  <header class="nav">
+    <div class="nav-inner">
+      <a class="brand" href="browse.html" aria-label="Akibur Rahman, home">AKIBUR</a>
+
+      <nav class="nav-links" id="site-nav" aria-label="Primary">
+        <a href="browse.html" data-page="browse">Home</a>
+        <a href="about.html" data-page="about">About</a>
+        <a href="skills.html" data-page="skills">Skills</a>
+        <a href="projects.html" data-page="projects">Projects</a>
+        <a href="education.html" data-page="education">Education</a>
+        <a href="achievements.html" data-page="achievements">Achievements</a>
+        <a href="resume.html" data-page="resume">Resume</a>
+        <a href="contact.html" data-page="contact">Contact</a>
+      </nav>
+
+      <a class="nav-profile" href="index.html" aria-label="Switch profile">
+        <span class="nav-avatar"></span>
+        <span class="nav-profile-name">Guest</span>
+      </a>
+
+      <button class="nav-toggle" aria-label="Open menu" aria-expanded="false" aria-controls="site-nav">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </header>
+
+  <main>
+    <section class="billboard" aria-label="Featured">
+      <img class="billboard-photo" src="./assets/profile-cutout.webp" alt="Akibur Rahman" width="900" height="1441" />
+      <div class="billboard-body">
+        <h1 class="billboard-title">Akibur<br />Rahman</h1>
+        <div class="billboard-meta">
+          <span class="meta-strong">CSE · Cyber security</span>
+          <span class="meta-muted">AIUB</span>
+          <span class="meta-box">Dhaka, BD</span>
+        </div>
+        <p class="billboard-sub">
+          CSE student at AIUB with a cyber security major. I'm learning how systems
+          <span class="redact">break</span> and how to
+          <span class="redact" style="--d:.9s">keep them safe</span>.
+        </p>
+        <div class="billboard-cta">
+          <a class="btn btn-play" href="projects.html" data-cta><span class="icon-play" aria-hidden="true"></span><span class="cta-label">Projects</span></a>
+          <a class="btn btn-info" href="about.html"><i class="icon-info" aria-hidden="true">i</i>More info</a>
+        </div>
+      </div>
+    </section>
+
+    <section class="row" data-row="top" aria-label="Top 5 picks from my resume">
+      <h2 class="row-title">Top 5 picks from my resume</h2>
+      <div class="row-track">
+        <div class="tile top" style="--g1:#7a0b12; --g2:#1a0a0c">
+          <span class="top-num" aria-hidden="true">1</span>
+          <div class="top-card"><div class="tile-title">Cyber security</div><div class="tile-tags">My major at AIUB</div></div>
+        </div>
+        <div class="tile top" style="--g1:#0b3a5a; --g2:#0a1a26">
+          <span class="top-num" aria-hidden="true">2</span>
+          <div class="top-card"><div class="tile-title">Journey by Bus</div><div class="tile-tags">C++ / OpenGL project</div></div>
+        </div>
+        <div class="tile top" style="--g1:#0b4a2e; --g2:#0a1c14">
+          <span class="top-num" aria-hidden="true">3</span>
+          <div class="top-card"><div class="tile-title">HSC: A+</div><div class="tile-tags">Cambrian College, 2022</div></div>
+        </div>
+        <div class="tile top" style="--g1:#3b1a63; --g2:#150c24">
+          <span class="top-num" aria-hidden="true">4</span>
+          <div class="top-card"><div class="tile-title">C++ · C# · Java</div><div class="tile-tags">Core languages</div></div>
+        </div>
+        <div class="tile top" style="--g1:#7a4a0b; --g2:#24160a">
+          <span class="top-num" aria-hidden="true">5</span>
+          <div class="top-card"><div class="tile-title">Volunteer</div><div class="tile-tags">KBFS certificates, BPS member</div></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="row" data-row="projects" aria-label="Projects">
+      <h2 class="row-title">Projects</h2>
+      <div class="row-track">
+        <a class="tile" href="projects.html" style="--g1:#7a0b12; --g2:#1a0a0c">
+          <div class="tile-title">Journey by Bus</div>
+          <div class="tile-tags">C++ · OpenGL / Graphics</div>
+          <div class="tile-desc">A four-scene interactive computer graphics application with bus and vehicle movement and real-time wind and rain. Mouse and keyboard controls move the camera and objects.</div>
+        </a>
+        <a class="tile" href="projects.html" style="--g1:#0b3a5a; --g2:#0a1a26">
+          <div class="tile-title">Hospital Management System</div>
+          <div class="tile-tags">Java · Management system</div>
+          <div class="tile-desc">Built to streamline hospital operations and help staff manage tasks with a smoother workflow.</div>
+        </a>
+        <a class="tile" href="projects.html" style="--g1:#3b1a63; --g2:#150c24">
+          <div class="tile-title">University Management System</div>
+          <div class="tile-tags">C# · University</div>
+          <div class="tile-desc">Admin system for student, teacher and staff data, fee records, CGPA view, and controlled data entry and removal.</div>
+        </a>
+        <a class="tile" href="projects.html" style="--g1:#7a4a0b; --g2:#24160a">
+          <div class="tile-title">Advanced Doorbell System</div>
+          <div class="tile-tags">EEE · IoT</div>
+          <div class="tile-desc">Concept design with camera support and smart features to modernize security and visitor notifications.</div>
+        </a>
+      </div>
+    </section>
+
+    <section class="row" data-row="skills" aria-label="Skills">
+      <h2 class="row-title">Skills</h2>
+      <div class="row-track">
+        <div class="tile info" style="--g1:#7a0b12; --g2:#1a0a0c">
+          <div class="tile-title">Security</div>
+          <div class="tile-list"><div>Cyber security major</div><div>AIUB, BSc in CSE</div></div>
+          
+        </div>
+        <div class="tile info" style="--g1:#0b3a5a; --g2:#0a1a26">
+          <div class="tile-title">Programming</div>
+          <div class="tile-list"><div>C++</div><div>C#</div><div>Java</div></div>
+          
+        </div>
+        <div class="tile info" style="--g1:#3b1a63; --g2:#150c24">
+          <div class="tile-title">Web</div>
+          <div class="tile-list"><div>HTML</div><div>CSS</div><div>React JS</div></div>
+          
+        </div>
+        <div class="tile info" style="--g1:#0b4a2e; --g2:#0a1c14">
+          <div class="tile-title">Version control</div>
+          <div class="tile-list"><div>Git</div><div>GitHub</div></div>
+          
+        </div>
+        <div class="tile info" style="--g1:#7a4a0b; --g2:#24160a">
+          <div class="tile-title">Tools</div>
+          <div class="tile-list"><div>MS Word, Excel, PowerPoint</div><div>Canva</div></div>
+          
+        </div>
+      </div>
+    </section>
+
+    <section class="row" data-row="education" aria-label="Continue watching: Education">
+      <h2 class="row-title">Continue watching: Education</h2>
+      <div class="row-track">
+        <div class="tile info" style="--g1:#7a0b12; --g2:#1a0a0c">
+          <div class="tile-title">AIUB</div>
+          <div class="tile-list"><div>BSc in CSE, cyber security major</div><div>CGPA 3.50 / 4.00</div></div>
+          <div class="progress" role="img" aria-label="CGPA 3.50 out of 4.00"><span style="width:87.5%"></span></div>
+        </div>
+        <div class="tile info" style="--g1:#0b3a5a; --g2:#0a1a26">
+          <div class="tile-title">Cambrian College</div>
+          <div class="tile-list"><div>HSC, Science · 2022</div><div>Result: A+</div></div>
+          <div class="progress" role="img" aria-label="Completed"><span style="width:100%"></span></div>
+        </div>
+        <div class="tile info" style="--g1:#3b1a63; --g2:#150c24">
+          <div class="tile-title">National Ideal School</div>
+          <div class="tile-list"><div>SSC, Science · 2020</div></div>
+          <div class="progress" role="img" aria-label="Completed"><span style="width:100%"></span></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="row" data-row="achievements" aria-label="Top moments">
+      <h2 class="row-title">Top moments</h2>
+      <div class="row-track">
+        <div class="tile info" style="--g1:#0b4a2e; --g2:#0a1c14">
+          <div class="tile-title">HSC: A+</div>
+          <div class="tile-list"><div>Cambrian College, 2022</div></div>
+          
+        </div>
+        <div class="tile info" style="--g1:#0b3a5a; --g2:#0a1a26">
+          <div class="tile-title">Volunteer</div>
+          <div class="tile-list"><div>Certificates from KBFS</div><div>Member of BPS</div></div>
+          
+        </div>
+        <div class="tile info" style="--g1:#7a4a0b; --g2:#24160a">
+          <div class="tile-title">Sports</div>
+          <div class="tile-list"><div>Prizes in Cricket and Football</div></div>
+          
+        </div>
+        <div class="tile info" style="--g1:#7a0b12; --g2:#1a0a0c">
+          <div class="tile-title">Blood donor</div>
+          <div class="tile-list"><div>Certified blood donor</div></div>
+          
+        </div>
+      </div>
+    </section>
+
+    <section class="row" data-row="contact" aria-label="Get in touch">
+      <h2 class="row-title">Get in touch</h2>
+      <div class="row-track">
+        <a class="tile info" href="mailto:akibrr239@gmail.com" target="_blank" rel="noreferrer" style="--g1:#7a0b12; --g2:#1a0a0c">
+          <div class="tile-title">Email</div>
+          <div class="tile-list"><div>akibrr239@gmail.com</div></div>
+          
+        </a>
+        <a class="tile info" href="https://www.linkedin.com/in/akibur-rahman-51aa00388" target="_blank" rel="noreferrer" style="--g1:#0b3a5a; --g2:#0a1a26">
+          <div class="tile-title">LinkedIn</div>
+          <div class="tile-list"><div>akibur-rahman-51aa00388</div></div>
+          
+        </a>
+        <a class="tile info" href="https://github.com/akibur-rahman99" target="_blank" rel="noreferrer" style="--g1:#2b3340; --g2:#12151a">
+          <div class="tile-title">GitHub</div>
+          <div class="tile-list"><div>akibur-rahman99</div></div>
+          
+        </a>
+        <a class="tile info" href="https://www.instagram.com/akib_rahman.ar" target="_blank" rel="noreferrer" style="--g1:#3b1a63; --g2:#150c24">
+          <div class="tile-title">Instagram</div>
+          <div class="tile-list"><div>@akib_rahman.ar</div></div>
+          
+        </a>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+      <div>© <span id="year"></span> Akibur Rahman</div>
+      <div class="footer-links">
+        <a href="browse.html">Home</a>
+        <a href="projects.html">Projects</a>
+        <a href="contact.html">Contact</a>
+        <a href="index.html">Switch profile</a>
+      </div>
+    </div>
+  </footer>
+
+  <script src="./script.js"></script>
+</body>
+</html>
