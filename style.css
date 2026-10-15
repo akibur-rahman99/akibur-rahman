@@ -733,3 +733,28 @@ a.pill:hover{background:#3a3a3a}
 .aki-head span:last-child{min-width:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap}
 .avatar-stage{grid-template-columns:minmax(0, 1fr)}
 .aki{min-width:0; width:100%}
+
+/* ---------- Case studies on the Projects page ---------- */
+.poster-grid{align-items:start}
+.case{margin-top:14px}
+.case summary{
+  list-style:none; cursor:pointer; display:inline-flex; align-items:center; gap:8px;
+  font-size:14px; font-weight:700; color:#fff; padding:6px 0; border-bottom:2px solid var(--red);
+}
+.case summary::-webkit-details-marker{display:none}
+.case summary::after{content:"+"; font-size:18px; line-height:1; transition:rotate var(--t-hover) var(--ease)}
+.case[open] summary::after{rotate:45deg}
+.case-close{display:none}
+.case[open] .case-open{display:none}
+.case[open] .case-close{display:inline}
+.case summary:hover{color:var(--red)}
+.case summary:focus-visible{outline:2px solid #fff; outline-offset:4px}
+.case-body{margin-top:14px; display:grid; gap:14px}
+.case-label{font-size:12px; font-weight:700; letter-spacing:.14em; text-transform:uppercase; color:var(--gold); margin-bottom:4px}
+.case-row p{margin:0; font-size:14.5px; line-height:1.55; color:#d9d9d9}
+.case-row ul{margin:0; padding-left:18px; font-size:14.5px; line-height:1.5; color:#d9d9d9}
+.case-row li{margin:0 0 4px}
+@media (prefers-reduced-motion: no-preference){
+  .case[open] .case-body{animation:rise .5s var(--ease) both}
+}
+.poster:has(.case[open]){--rx:0deg !important; --ry:0deg !important}
