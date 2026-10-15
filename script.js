@@ -579,7 +579,7 @@ void main(){
   stage._akiClick = () => { if (onClick) onClick(); };
 });
 
-// ---- AKI-9: the avatar's chat box. It introduces itself, then reacts to the cursor ----
+// ---- AKIRA (Akibur's Knowledge & Intelligence Response Agent): the avatar's chat box. It introduces itself, then reacts to the cursor ----
 (() => {
   const stage = document.querySelector('.avatar-stage');
   const box = stage && stage.querySelector('.aki');
@@ -621,13 +621,15 @@ void main(){
   const intro = async () => {
     await sleep(900);
     busy = true;
-    await type('booting AKI-9 ... ok', 'sys');
+    const hr = new Date().getHours();
+    const tod = hr < 5 ? 'evening' : hr < 12 ? 'morning' : hr < 17 ? 'afternoon' : 'evening';
+    await type('initialising A.K.I.R.A. ... all systems nominal', 'sys');
     await sleep(500);
-    await type("Hi. I'm AKI-9, the AI twin of Akibur Rahman.");
+    await type(`Good ${tod}. I'm AKIRA, Akibur's Knowledge & Intelligence Response Agent.`);
     await sleep(650);
-    await type('He studies CSE at AIUB and is going deep into cyber security. I run when he is offline.');
+    await type('I am the AI twin of Akibur Rahman. He studies CSE at AIUB and is going deep into cyber security. I keep watch while he is offline.');
     await sleep(650);
-    await type("Move your cursor. I'll tell you what I see.");
+    await type("Move your cursor. I'll narrate.");
     busy = false; introDone = true; lastSay = performance.now();
   };
   if ('IntersectionObserver' in window) {
@@ -637,22 +639,22 @@ void main(){
 
   // ---- cursor reading: direction, speed, idle, leaving, links
   const SECTORS = {
-    E:  ['East side: nothing there but the scrollbar. I checked.', 'Right edge. Dead end. Even I am not that secluded.'],
-    NE: ['Top-right. Your profile chip lives up there.', 'North-east. Switching profiles? I support all four.'],
-    N:  ['Looking up? The menu is there. Skills, Projects, Resume.', 'Heading north. Resume is up there if you are hiring.'],
-    NW: ['Top-left. The AKIBUR logo takes you home.', 'North-west. That logo is a very good home button.'],
-    W:  ["Cursor west. That's where the links are. Email is the fastest.", 'Going left? Good call. The contact links are over there.'],
-    SW: ['South-west. Instagram lives down there.', 'Bottom-left. The links keep going, scroll a bit.'],
-    S:  ['Heading south. More links below. Keep scrolling.', 'Down there? Scroll for more links. Nothing hidden, I promise.'],
-    SE: ["Bottom-right. Quiet corner. Nothing to see.", 'South-east. Nothing classified here.']
+    E:  ['Eastern edge. Nothing out there but the scrollbar.', 'Right edge detected. A dead end, per my scans.'],
+    NE: ['North-east: the profile chip. I can switch you between four profiles.', 'Top-right. Profile switcher. Four profiles on file.'],
+    N:  ['Menu detected, north. Skills, Projects, Resume.', 'Heading north. The resume is up there if you are hiring.'],
+    NW: ['North-west: the AKIBUR logo. It takes you home.', 'Top-left. Home is one click away.'],
+    W:  ['Heading west. That is where the contact links are. Email is the quickest.', 'West it is. The contact links are over there.'],
+    SW: ['South-west. Instagram is down that way.', 'Lower left. More links below. Scroll when ready.'],
+    S:  ['Heading south. More links below.', 'South. Nothing hidden down there. I checked.'],
+    SE: ['South-east. Quiet sector. Nothing to report.', 'Lower right. All clear.']
   };
   const LINKS = [
-    [/mailto:/, ['Email: the quickest way to reach Akibur.', 'Email it is. Short subject line, clear ask, and he will see it.']],
-    [/linkedin/, ['LinkedIn. Professional mode. Blazer on.', 'LinkedIn: the formal version of him.']],
-    [/github/, ['GitHub: where the code lives. Inspect away. Responsibly.', 'GitHub. Fork nicely.']],
-    [/tel:/, ['A real phone call. Bold. I respect it.']],
+    [/mailto:/, ['Email: the quickest way to reach Akibur.', 'Good choice. A short subject line and a clear ask, and he will see it.']],
+    [/linkedin/, ['LinkedIn. Formal channel. Blazer on.', 'LinkedIn: the professional version of him.']],
+    [/github/, ['GitHub: where the code lives. Inspect away, responsibly.', 'GitHub. Fork nicely.']],
+    [/tel:/, ['A real phone call. Bold. Noted.']],
     [/wa\.me/, ['WhatsApp works too. No spam, I promise.']],
-    [/instagram/, ['Instagram: the unclassified side of him.']]
+    [/instagram/, ['Instagram: the off-duty feed.']]
   ];
   let lastSector = '', sectorSince = 0, lastX = 0, lastY = 0, lastT = performance.now(), speed = 0, shownTh = '';
   let lastMove = performance.now(), idleLevel = 0, gone = false;
@@ -662,16 +664,16 @@ void main(){
     const v = Math.hypot(e.clientX - lastX, e.clientY - lastY) / dt;
     speed += (v - speed) * 0.25;
     lastX = e.clientX; lastY = e.clientY; lastT = now; lastMove = now; idleLevel = 0;
-    if (gone) { gone = false; say('Welcome back, human.', 2); }
+    if (gone) { gone = false; say('Welcome back. I held the fort.', 2); }
     const r = canvas.getBoundingClientRect();
     const dx = e.clientX - (r.left + r.width * 0.48), dy = e.clientY - (r.top + r.height * 0.17);
     const dist = Math.hypot(dx, dy);
     if (hx) { hx.textContent = (clamp(dx / (r.width * 0.9), -1, 1) >= 0 ? '+' : '') + clamp(dx / (r.width * 0.9), -1, 1).toFixed(2); }
     if (hy) { hy.textContent = (clamp(dy / (r.height * 0.5), -1, 1) >= 0 ? '+' : '') + clamp(dy / (r.height * 0.5), -1, 1).toFixed(2); }
-    if (speed > 2.6) { say(pick(['Whoa. Slow down. I am rate-limiting you.', 'Cursor velocity: suspicious. Logging it.']), 1); return; }
+    if (speed > 2.6) { say(pick(['Easy. Cursor velocity exceeds safe limits. Rate-limiting you.', 'Cursor velocity: suspicious. Logging it.']), 1); return; }
     if (e.target.closest && e.target.closest('.avatar-canvas')) {
       const face = Math.hypot(dx, dy) < r.width * 0.16;
-      if (face) { say('Eye contact detected. Bold of you.', 1); return; }
+      if (face) { say('Eye contact established. Bold.', 1); return; }
     }
     if (dist > r.width * 0.55) {
       const ang = Math.atan2(-dy, dx) * 180 / Math.PI;           // 0 = east, 90 = north
@@ -687,8 +689,8 @@ void main(){
       if (m) say(pick(m[1]), 2);
     });
   });
-  canvas.addEventListener('click', () => say(pick(['Ouch. Please do not pen-test me.', 'Access denied. Kidding. Hi!', 'That tickles. Logging it anyway.']), 3));
-  document.documentElement.addEventListener('pointerleave', () => { if (!gone) { gone = true; say('Connection lost ... I will wait.', 2); } });
+  canvas.addEventListener('click', () => say(pick(['Ouch. Please do not pen-test me.', 'Access denied. Kidding. Hello.', 'Contact registered. Logging it anyway.']), 3));
+  document.documentElement.addEventListener('pointerleave', () => { if (!gone) { gone = true; say('Connection lost. Standing by.', 2); } });
 
   // threat meter and idle check, ten times a second
   setInterval(() => {
@@ -696,8 +698,9 @@ void main(){
     const th = speed > 2.2 ? 'high' : speed > 0.9 ? 'med' : 'low';
     if (hth && th !== shownTh) { shownTh = th; hth.textContent = th.toUpperCase(); hth.className = 'th-' + th; }
     const idle = performance.now() - lastMove;
-    if (introDone && idle > 7000 && idleLevel === 0) { idleLevel = 1; say('No input for 7s. Are you still human? Wiggle the mouse if so.', 2); }
-    else if (introDone && idle > 22000 && idleLevel === 1) { idleLevel = 2; say('Still here. I will keep the lights on.', 2); }
+    if (introDone && idle > 7000 && idleLevel === 0) { idleLevel = 1; say('No input for 7 seconds. Still human? Move the mouse to confirm.', 2); }
+    else if (introDone && idle > 22000 && idleLevel === 1) { idleLevel = 2; say('Still here. Keeping the lights on.', 2); }
+    else if (introDone && idle > 30000 && idleLevel === 2) { idleLevel = 3; say('Power-saving mode. Eyes closed. Wake me any time.', 2); }
   }, 100);
 })();
 
