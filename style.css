@@ -445,13 +445,15 @@ a.pill:hover{background:#3a3a3a}
   position:absolute; inset:4% 2% 12%; border-radius:50%; pointer-events:none;
   background:radial-gradient(circle at 50% 42%, rgba(229,9,20,.5), rgba(229,9,20,0) 68%);
 }
-.avatar-svg{
-  position:relative; z-index:1; width:100%; max-width:520px; height:auto; overflow:visible; cursor:pointer;
-  -webkit-mask-image:linear-gradient(180deg, #000 84%, transparent 100%); mask-image:linear-gradient(180deg, #000 84%, transparent 100%);
+.avatar-canvas{
+  position:relative; z-index:1; display:block; width:100%; max-width:460px; aspect-ratio:2 / 3; height:auto; cursor:pointer;
 }
-#av-head{transform-origin:300px 520px}
-#av-body{transform-origin:300px 760px}
-.av-lid{transform-box:fill-box; transform-origin:50% 0; transform:scaleY(0)}
+.avatar-canvas, .avatar-fallback{
+  -webkit-mask-image:linear-gradient(180deg, transparent 0, #000 6%, #000 80%, transparent 100%), linear-gradient(90deg, transparent 0, #000 10%, #000 90%, transparent 100%);
+  mask-image:linear-gradient(180deg, transparent 0, #000 6%, #000 80%, transparent 100%), linear-gradient(90deg, transparent 0, #000 10%, #000 90%, transparent 100%);
+  -webkit-mask-composite:source-in; mask-composite:intersect;
+}
+.avatar-fallback{position:relative; z-index:1; width:100%; max-width:460px; height:auto}
 .avatar-bubble{
   position:absolute; top:4%; right:0; z-index:2; padding:8px 14px; border-radius:14px 14px 14px 2px;
   background:#fff; color:#111; font-weight:700; font-size:14px; pointer-events:none;
@@ -563,7 +565,7 @@ a.pill:hover{background:#3a3a3a}
   }
 
   /* contact avatar: breathing, blinking, glow */
-  .avatar-svg{animation:bob 6s ease-in-out infinite}
+  .avatar-canvas{animation:bob 6s ease-in-out infinite}
   .av-lid{animation:blink 5.5s infinite}
   .avatar-glow{animation:glowPulse 4s ease-in-out infinite alternate}
 
@@ -580,7 +582,14 @@ a.pill:hover{background:#3a3a3a}
 .footer-links a:hover{text-decoration:underline; color:#fff}
 
 /* ---------- Mobile ---------- */
-@media (max-width: 900px){
+@media (max-width: 900px) and (min-width: 721px){
+  .nav-inner{gap:14px}
+  .brand{font-size:28px}
+  .nav-links{gap:12px}
+  .nav-links a{font-size:13px}
+  .nav-profile-name{display:none}
+}
+@media (max-width: 720px){
   .nav-toggle{display:inline-flex; flex-direction:column; justify-content:center; order:3}
   .nav-inner{gap:16px}
   .nav-links{
@@ -591,6 +600,8 @@ a.pill:hover{background:#3a3a3a}
   .nav-links.open{display:flex}
   .brand{margin-right:auto}
   .nav-profile-name{display:none}
+}
+@media (max-width: 900px){
   .dossier{grid-template-columns:1fr; gap:8px; padding:26px 0}
   .grid-2{grid-template-columns:1fr; gap:20px}
   .plain.cols{columns:1}
@@ -634,8 +645,6 @@ a.pill:hover{background:#3a3a3a}
   transform:translateY(-6px) scale(1.04); border-color:#fff;
   box-shadow:0 14px 34px rgba(0,0,0,.55), 0 0 0 1px var(--c, #fff), 0 0 34px color-mix(in srgb, var(--c, #fff) 45%, transparent);
 }
-.profile-tag{font-size:12.5px; line-height:1.35; color:var(--muted); max-width:18ch; transition:color .2s ease}
-.profile:hover .profile-tag, .profile:focus-visible .profile-tag{color:#e5e5e5}
 .profile.last .profile-avatar{border-color:rgba(255,255,255,.55)}
 .profile-last{
   position:absolute; top:-11px; left:50%; translate:-50% 0; white-space:nowrap;
@@ -644,21 +653,6 @@ a.pill:hover{background:#3a3a3a}
 }
 .pupil{translate:calc(var(--px, 0) * 1.7px) calc(var(--py, 0) * 1.3px); transition:translate .12s ease-out}
 
-.chooser-preview{display:grid; margin-top:clamp(22px, 3.4vw, 40px); width:min(560px, 100%)}
-.pv{
-  grid-area:1 / 1; display:flex; flex-direction:column; align-items:center; gap:12px;
-  opacity:0; visibility:hidden; transition:opacity .25s ease, visibility .25s;
-}
-.pv.on{opacity:1; visibility:visible}
-.pv-head{font-size:14px; color:var(--muted)}
-.pv-head strong{color:#fff; font-weight:500}
-.pv-tiles{display:flex; gap:10px; width:100%}
-.pv-tile{
-  flex:1; aspect-ratio:16 / 9; display:flex; align-items:flex-end; padding:8px 10px; border-radius:var(--radius);
-  background:linear-gradient(135deg, var(--g1), var(--g2)); font-size:13px; font-weight:500; text-align:left;
-}
-.pv-foot{font-size:13px; color:var(--muted)}
-.pv-foot b{color:#fff; font-weight:500}
 .manage{
   margin-top:clamp(22px, 3vw, 36px); padding:9px 22px; border:1px solid #808080; border-radius:var(--radius);
   color:#808080; text-decoration:none; font-size:14px; letter-spacing:.12em; text-transform:uppercase;
@@ -666,7 +660,6 @@ a.pill:hover{background:#3a3a3a}
 }
 .manage span{letter-spacing:.04em; text-transform:none; opacity:.8}
 .manage:hover, .manage:focus-visible{color:#fff; border-color:#fff}
-@media (hover:none){.chooser-preview{display:none}}
 @media (max-width:720px){
   .profile{width:128px}
   .manage span{display:none}
@@ -705,6 +698,7 @@ a.pill:hover{background:#3a3a3a}
   position:absolute; z-index:0; top:-8%; left:50%; width:92%; height:96%; translate:-50% 0; pointer-events:none; opacity:0;
   background:linear-gradient(180deg, rgba(255,226,226,.30), rgba(255,226,226,0) 78%);
   clip-path:polygon(38% 0, 62% 0, 100% 100%, 0 100%); filter:blur(16px);
+  -webkit-mask-image:linear-gradient(180deg, transparent 0, #000 30%, #000 55%, transparent 100%); mask-image:linear-gradient(180deg, transparent 0, #000 30%, #000 55%, transparent 100%);
 }
 .avatar-dust{position:absolute; inset:0; z-index:0; pointer-events:none; overflow:hidden}
 .avatar-dust i{
@@ -716,11 +710,10 @@ a.pill:hover{background:#3a3a3a}
   background:radial-gradient(260px 260px at var(--lx, 50%) var(--ly, 40%), rgba(255,255,255,.14), rgba(255,255,255,0) 70%);
 }
 .avatar-stage.live .avatar-spot{opacity:1}
-.avatar-svg{filter:drop-shadow(0 0 26px rgba(229,9,20,.28)) drop-shadow(0 18px 30px rgba(0,0,0,.5))}
 @keyframes camIn{
   from{opacity:0; filter:blur(16px) brightness(.4); scale:1.08; translate:0 28px}
   60%{filter:blur(2px) brightness(.9)}
-  to{opacity:1; filter:drop-shadow(0 0 26px rgba(229,9,20,.28)) drop-shadow(0 18px 30px rgba(0,0,0,.5)); scale:1; translate:0 0}
+  to{opacity:1; filter:none; scale:1; translate:0 0}
 }
 @keyframes beamIn{0%{opacity:0; scale:1 .6} 35%{opacity:1} 100%{opacity:.55; scale:1 1}}
 @keyframes dust{
@@ -729,8 +722,8 @@ a.pill:hover{background:#3a3a3a}
   100%{opacity:0; translate:var(--dx) -260px}
 }
 @media (prefers-reduced-motion: no-preference){
-  .js .avatar-stage .avatar-svg{opacity:0}
-  .js .avatar-stage.live .avatar-svg{animation:camIn 1.8s var(--ease) .25s both, bob 6s ease-in-out 2.2s infinite}
+  .js .avatar-stage .avatar-canvas{opacity:0}
+  .js .avatar-stage.live .avatar-canvas{animation:camIn 1.8s var(--ease) .25s both, bob 6s ease-in-out 2.2s infinite}
   .js .avatar-stage.live .avatar-beam{animation:beamIn 2.2s ease .05s both}
   .js .avatar-stage.live .avatar-glow{animation:glowPulse 4s ease-in-out infinite alternate}
   .js .avatar-stage.live .avatar-dust i{animation:dust var(--t) ease-in var(--d) infinite}

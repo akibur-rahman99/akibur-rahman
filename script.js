@@ -142,18 +142,6 @@ if (intro && chooser) {
     lastTile.appendChild(badge);
   }
 
-  // Preview panel: shows what the hovered or focused profile plays first
-  const previews = [...chooser.querySelectorAll('.pv')];
-  const fallbackKey = (lastTile || tiles[0]).dataset.key;
-  const showPreview = key => previews.forEach(p => p.classList.toggle('on', p.dataset.for === key));
-  showPreview(fallbackKey);
-  tiles.forEach(t => {
-    t.addEventListener('pointerenter', () => showPreview(t.dataset.key));
-    t.addEventListener('focus', () => showPreview(t.dataset.key));
-  });
-  const nav = chooser.querySelector('.profiles');
-  nav.addEventListener('pointerleave', () => showPreview(document.activeElement && document.activeElement.dataset ? (document.activeElement.dataset.key || fallbackKey) : fallbackKey));
-
   // Keyboard: arrows move between profiles, 1-4 jump straight in
   chooser.addEventListener('keydown', e => {
     const i = tiles.indexOf(document.activeElement);
@@ -311,50 +299,19 @@ if (!reduceMotion && finePointer) {
   hero.addEventListener('pointerleave', () => { tx = 0; ty = 0; go(); });
 })();
 
-// ---- Contact avatar: cinematic entrance, head/eyes/brows follow the pointer ----
+// ---- Contact avatar: 2.5D parallax portrait (WebGL) -----------------------
+// Depth map makes the head turn toward the pointer, eyes follow it,
+// plus a spotlight that tracks the cursor, a light sweep and a glint on the glasses.
 (() => {
-  const svg = document.querySelector('.avatar-svg');
-  if (!svg) return;
-  const stage = svg.closest('.avatar-stage');
-  const $ = s => svg.querySelector(s);
-  const head = $('#av-head'), hair = $('#av-hair'), feat = $('#av-feat'), body = $('#av-body'), hands = $('#av-hands');
-  const brows = $('#av-brows'), eyeL = $('#av-eyeball-l'), eyeR = $('#av-eyeball-r'), glint = $('#av-glint');
-  const mClosed = $('#av-mouth-closed'), mOpen = $('#av-mouth-open'), sweep = $('#av-sweep');
+  const canvas = document.querySelector('.avatar-canvas');
+  if (!canvas) return;
+  const stage = canvas.closest('.avatar-stage');
+  const fallback = stage.querySelector('.avatar-fallback');
   const bubble = stage.querySelector('.avatar-bubble');
   const dust = stage.querySelector('.avatar-dust');
-  let tx = 0, ty = 0, cx = 0, cy = 0, sp = 0, spUntil = 0, last = performance.now(), seen = false;
   const f = n => n.toFixed(2);
 
-  const apply = (now) => {
-    const br = reduceMotion ? 0 : Math.sin(now / 850);
-    head.style.transform = 'rotate(' + f(cx * 7) + 'deg) translate(' + f(cx * 7) + 'px,' + f(cy * 4 + br * 0.8) + 'px)';
-    hair.style.transform = 'translate(' + f(cx * 4) + 'px,' + f(cy * 2.5) + 'px)';
-    feat.style.transform = 'translate(' + f(cx * 11) + 'px,' + f(cy * 7) + 'px)';
-    body.style.transform = 'translate(' + f(cx * -4) + 'px,0) scale(1,' + (1 + 0.006 * br).toFixed(4) + ')';
-    hands.style.transform = 'translate(' + f(cx * -6) + 'px,' + f(cy * -2 + br * 1.5) + 'px)';
-    const eye = 'translate(' + f(cx * 9) + 'px,' + f(cy * 6) + 'px)';
-    eyeL.style.transform = eye; eyeR.style.transform = eye;
-    brows.style.transform = 'translate(0,' + f(-sp * 10 + cy * -2) + 'px)';
-    glint.style.transform = 'skewX(-16deg) translateX(' + f(cx * 80 + 12) + 'px)';
-    const open = sp > 0.45;
-    mOpen.style.opacity = open ? 1 : 0;
-    mClosed.style.opacity = open ? 0 : 1;
-  };
-  if (reduceMotion) { apply(0); stage.classList.add('live'); return; }
-
-  // pointer: the head follows, the spotlight follows too
-  window.addEventListener('pointermove', e => {
-    const r = svg.getBoundingClientRect();
-    tx = clamp((e.clientX - (r.left + r.width * 0.5)) / (r.width * 0.8), -1, 1);
-    ty = clamp((e.clientY - (r.top + r.height * 0.42)) / (r.height * 0.6), -1, 1);
-    const sr = stage.getBoundingClientRect();
-    stage.style.setProperty('--lx', f(e.clientX - sr.left) + 'px');
-    stage.style.setProperty('--ly', f(e.clientY - sr.top) + 'px');
-    last = performance.now();
-    seen = true;
-  }, { passive: true });
-  window.addEventListener('pointerleave', () => { tx = 0; ty = 0; });
-
+  // ---- speech bubble, dust, start of the show (shared by both renderers)
   let showTimer = 0;
   const say = text => {
     if (!bubble) return;
@@ -363,61 +320,206 @@ if (!reduceMotion && finePointer) {
     clearTimeout(showTimer);
     showTimer = setTimeout(() => bubble.classList.remove('show'), 1800);
   };
-  svg.addEventListener('click', () => {
-    sp = 1; spUntil = performance.now() + 900;
-    say(['Hey, caught you!', 'Boo!', 'Ouch, that tickles!'][Math.floor(Math.random() * 3)]);
-    svg.animate([{ scale: 1 }, { scale: 1.04 }, { scale: 1 }], { duration: 460, easing: 'cubic-bezier(.2,.8,.2,1)' });
-  });
-  svg.addEventListener('pointerenter', () => { if (finePointer) say('Hi there!'); });
-
-  // light sweep over the blazer
-  const doSweep = () => {
-    sweep.animate(
-      [{ transform: 'skewX(-18deg) translateX(0)', opacity: 0 }, { opacity: 1, offset: 0.2 }, { opacity: 1, offset: 0.8 }, { transform: 'skewX(-18deg) translateX(980px)', opacity: 0 }],
-      { duration: 2000, easing: 'ease-in-out' }
-    );
-  };
-
-  // floating dust in the spotlight
-  for (let i = 0; i < 18; i++) {
-    const d = document.createElement('i');
-    d.style.setProperty('--x', (8 + Math.random() * 84) + '%');
-    d.style.setProperty('--y', (4 + Math.random() * 40) + '%');
-    d.style.setProperty('--s', (2 + Math.random() * 3.5).toFixed(1) + 'px');
-    d.style.setProperty('--t', (6 + Math.random() * 6).toFixed(1) + 's');
-    d.style.setProperty('--d', (Math.random() * 6).toFixed(1) + 's');
-    d.style.setProperty('--dx', (Math.random() * 60 - 30).toFixed(0) + 'px');
-    dust.appendChild(d);
+  if (!reduceMotion && dust) {
+    for (let i = 0; i < 18; i++) {
+      const d = document.createElement('i');
+      d.style.setProperty('--x', (8 + Math.random() * 84) + '%');
+      d.style.setProperty('--y', (4 + Math.random() * 40) + '%');
+      d.style.setProperty('--s', (2 + Math.random() * 3.5).toFixed(1) + 'px');
+      d.style.setProperty('--t', (6 + Math.random() * 6).toFixed(1) + 's');
+      d.style.setProperty('--d', (Math.random() * 6).toFixed(1) + 's');
+      d.style.setProperty('--dx', (Math.random() * 60 - 30).toFixed(0) + 'px');
+      dust.appendChild(d);
+    }
   }
 
-  // start the show when the stage scrolls into view
-  let started = false;
-  const start = () => {
-    if (started) return;
-    started = true;
-    stage.classList.add('live');
-    setTimeout(doSweep, 1500);
-    setTimeout(() => say('Hi there!'), 2100);
-    setInterval(() => { if (!document.hidden) doSweep(); }, 11000);
-  };
-  if ('IntersectionObserver' in window) {
-    const io = new IntersectionObserver(es => { if (es.some(e => e.isIntersecting)) { start(); io.disconnect(); } }, { threshold: 0.3 });
-    io.observe(stage);
-  } else start();
+  const gl = canvas.getContext('webgl2', { antialias: false, alpha: true, premultipliedAlpha: true });
+  let onPointer = null, sweepNow = () => {}, onClick = null, draw = null;
 
-  const tick = now => {
-    if (sp > 0 && now > spUntil) sp = Math.max(0, sp - 0.06);
-    // with no pointer for a while the avatar glances around on its own
-    if (!seen || now - last > 3500) {
-      tx = Math.sin(now / 1900) * 0.7;
-      ty = Math.sin(now / 2600 + 1) * 0.25;
-    }
-    cx += (tx - cx) * 0.09;
-    cy += (ty - cy) * 0.09;
-    apply(now);
-    requestAnimationFrame(tick);
-  };
-  requestAnimationFrame(tick);
+  // ---------------- WebGL renderer
+  if (gl) {
+    const VS = `#version 300 es
+in vec2 p; out vec2 vUv;
+void main(){ vUv = vec2(p.x * .5 + .5, .5 - p.y * .5); gl_Position = vec4(p, 0., 1.); }`;
+    const FS = `#version 300 es
+precision highp float;
+uniform sampler2D uTex, uDepth;
+uniform vec2 uM, uGaze, uPtr;
+uniform float uT, uIntro, uSweep, uPulse;
+in vec2 vUv; out vec4 o;
+float g(float x, float s){ return exp(-x * x / (2. * s * s)); }
+void main(){
+  vec2 uv = vUv;
+  uv = (uv - vec2(.5, .3)) * (1. - .03 * uPulse) + vec2(.5, .3);
+  float dp = texture(uDepth, uv).r;
+  vec2 par = uM * (dp - .4) * vec2(.017, .012);
+  float breath = sin(uT * 1.15) * .0014 * smoothstep(.30, .42, uv.y);
+  vec2 u1 = uv - par + vec2(0., breath);
+  // eyes: content inside each eye opening slides, so the irises look around
+  vec2 eL = vec2(425. / 1024., 241. / 1536.), eR = vec2(543. / 1024., 227. / 1536.);
+  vec2 rad = vec2(25. / 1024., 10.5 / 1536.);
+  float mk = (1. - smoothstep(.70, 1., length((u1 - eL) / rad))) + (1. - smoothstep(.70, 1., length((u1 - eR) / rad)));
+  vec2 u2 = u1 - uGaze * vec2(6.5 / 1024., 2.6 / 1536.) * mk;
+  vec3 c = texture(uTex, u2).rgb;
+  // light that follows the pointer
+  vec2 pd = (uv - uPtr) * vec2(.667, 1.);
+  float L = g(length(pd), .20);
+  c *= 1. + L * .42 * uIntro;
+  c += vec3(1., .70, .60) * L * .035;
+  // glint across the lenses
+  vec2 lr = vec2(66. / 1024., 44. / 1536.);
+  float lens = max(1. - smoothstep(.8, 1., length((u1 - vec2(425. / 1024., 236. / 1536.)) / lr)),
+                   1. - smoothstep(.8, 1., length((u1 - vec2(543. / 1024., 224. / 1536.)) / lr)));
+  float s = u1.x * 1024. + u1.y * 1536. * .55 - 300. - uM.x * 60.;
+  c += vec3(1.) * lens * (g(s - 520., 7.) + .45 * g(s - 548., 3.5)) * .30;
+  // light sweep across the blazer
+  if (uSweep >= 0.) {
+    float s2 = uv.x * 1024. - uv.y * 1536. * .30;
+    float pos = mix(-500., 1500., uSweep);
+    float lum = dot(c, vec3(.30, .59, .11));
+    c += vec3(1., .78, .74) * g(s2 - pos, 70.) * .24 * (.35 + lum * 1.6);
+  }
+  // grade: intro fade-in, vignette, grain, gentle contrast
+  c *= mix(.12, 1., smoothstep(0., 1., uIntro));
+  c *= 1. - .32 * smoothstep(.42, .98, length((uv - .5) * vec2(1., .9) * 1.6));
+  c += uPulse * .10;
+  c = mix(c, c * c * (3. - 2. * c), .12);
+  c = c * (1. - .078) + .078; // lift blacks to the page colour so the portrait melts into it
+  c += (fract(sin(dot(gl_FragCoord.xy + uT * 37., vec2(12.9898, 78.233))) * 43758.5453) - .5) * .028;
+  o = vec4(clamp(c, 0., 1.), 1.);
+}`;
+    const sh = (type, src) => { const s = gl.createShader(type); gl.shaderSource(s, src); gl.compileShader(s); return s; };
+    const prog = gl.createProgram();
+    gl.attachShader(prog, sh(gl.VERTEX_SHADER, VS));
+    gl.attachShader(prog, sh(gl.FRAGMENT_SHADER, FS));
+    gl.linkProgram(prog);
+    if (!gl.getProgramParameter(prog, gl.LINK_STATUS)) { console.warn(gl.getProgramInfoLog(prog)); }
+    gl.useProgram(prog);
+    const buf = gl.createBuffer();
+    gl.bindBuffer(gl.ARRAY_BUFFER, buf);
+    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1, -1, 1, -1, -1, 1, 1, 1]), gl.STATIC_DRAW);
+    const loc = gl.getAttribLocation(prog, 'p');
+    gl.enableVertexAttribArray(loc);
+    gl.vertexAttribPointer(loc, 2, gl.FLOAT, false, 0, 0);
+    const U = n => gl.getUniformLocation(prog, n);
+    const u = { M: U('uM'), Gaze: U('uGaze'), Ptr: U('uPtr'), T: U('uT'), Intro: U('uIntro'), Sweep: U('uSweep'), Pulse: U('uPulse') };
+
+    const loadTex = (src, unit, mip) => new Promise(res => {
+      const img = new Image();
+      img.onload = () => {
+        const t = gl.createTexture();
+        gl.activeTexture(gl.TEXTURE0 + unit);
+        gl.bindTexture(gl.TEXTURE_2D, t);
+        gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, img);
+        if (mip) gl.generateMipmap(gl.TEXTURE_2D);
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, mip ? gl.LINEAR_MIPMAP_LINEAR : gl.LINEAR);
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+        res(true);
+      };
+      img.onerror = () => res(false);
+      img.src = src;
+    });
+    gl.uniform1i(U('uTex'), 0);
+    gl.uniform1i(U('uDepth'), 1);
+
+    // state
+    let cx = 0, cy = 0, gx = 0, gy = 0, tx = 0, ty = 0, px = 0.5, py = 0.4, tpx = 0.5, tpy = 0.4;
+    let pulse = 0, lockUntil = 0, lastMove = performance.now(), seen = false;
+    let intro = reduceMotion ? 1 : 0, introStart = 0, sweepT = -1, sweepStart = 0;
+    let live = false, visible = false;
+
+    const resize = () => {
+      const r = canvas.getBoundingClientRect();
+      const dpr = Math.min(window.devicePixelRatio || 1, 2);
+      const w = Math.max(2, Math.round(r.width * dpr)), h = Math.round(w * 1.5);
+      if (canvas.width !== w || canvas.height !== h) { canvas.width = w; canvas.height = h; }
+      gl.viewport(0, 0, canvas.width, canvas.height);
+    };
+    new ResizeObserver(resize).observe(canvas);
+    resize();
+
+    draw = now => {
+      const t = now / 1000;
+      if (live && intro < 1) intro = Math.min(1, (now - introStart) / 2200);
+      if (sweepT >= 0) { sweepT = (now - sweepStart) / 2200; if (sweepT > 1) sweepT = -1; }
+      if (pulse > 0) pulse = Math.max(0, pulse - 0.045);
+      let ttx = tx, tty = ty, tgx = tx, tgy = ty;
+      if (now < lockUntil) { ttx = 0; tty = 0; tgx = 0; tgy = 0; }
+      else if (!seen || now - lastMove > 3500) {
+        ttx = Math.sin(t / 1.9) * 0.7; tty = Math.sin(t / 2.6 + 1) * 0.25; tgx = ttx; tgy = tty;
+      }
+      cx += (ttx - cx) * 0.07; cy += (tty - cy) * 0.07;
+      gx += (tgx - gx) * 0.16; gy += (tgy - gy) * 0.16;
+      px += (tpx - px) * 0.15; py += (tpy - py) * 0.15;
+      gl.uniform2f(u.M, cx, cy);
+      gl.uniform2f(u.Gaze, gx, gy);
+      gl.uniform2f(u.Ptr, px, py);
+      gl.uniform1f(u.T, t);
+      gl.uniform1f(u.Intro, intro);
+      gl.uniform1f(u.Sweep, sweepT);
+      gl.uniform1f(u.Pulse, pulse);
+      gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
+    };
+
+    onPointer = e => {
+      const r = canvas.getBoundingClientRect();
+      tx = clamp((e.clientX - (r.left + r.width * 0.48)) / (r.width * 0.9), -1, 1);
+      ty = clamp((e.clientY - (r.top + r.height * 0.17)) / (r.height * 0.5), -1, 1);
+      tpx = (e.clientX - r.left) / r.width;
+      tpy = (e.clientY - r.top) / r.height;
+      lastMove = performance.now(); seen = true;
+    };
+    onClick = () => {
+      pulse = 1; lockUntil = performance.now() + 1100;
+      say(['Hey, caught you!', 'Boo!', 'Ouch, that tickles!'][Math.floor(Math.random() * 3)]);
+      canvas.animate([{ scale: 1 }, { scale: 1.035 }, { scale: 1 }], { duration: 480, easing: 'cubic-bezier(.2,.8,.2,1)' });
+    };
+    sweepNow = () => { sweepT = 0; sweepStart = performance.now(); };
+
+    Promise.all([loadTex(canvas.dataset.tex, 0, true), loadTex(canvas.dataset.depth, 1, false)]).then(([a, b]) => {
+      if (!a || !b) { gl.getExtension('WEBGL_lose_context'); canvas.hidden = true; if (fallback) fallback.hidden = false; setupFallback(); return; }
+      canvas.classList.add('ready');
+      if (reduceMotion) { introStart = performance.now(); intro = 1; live = true; stage.classList.add('live'); draw(performance.now()); return; }
+      const loop = now => { if (visible && !document.hidden) draw(now); requestAnimationFrame(loop); };
+      requestAnimationFrame(loop);
+      const io = new IntersectionObserver(es => {
+        visible = es.some(e => e.isIntersecting);
+        if (visible && !live) {
+          live = true; introStart = performance.now(); stage.classList.add('live');
+          setTimeout(sweepNow, 1700);
+          setTimeout(() => say('Hi there!'), 2300);
+          setInterval(() => { if (!document.hidden && visible) sweepNow(); }, 11000);
+        }
+      }, { threshold: 0.2 });
+      io.observe(stage);
+    });
+  } else {
+    canvas.hidden = true;
+    if (fallback) fallback.hidden = false;
+  }
+
+  // ---------------- fallback: plain image that tilts (no WebGL2)
+  function setupFallback() {
+    stage.classList.add('live');
+    if (reduceMotion || !fallback) return;
+    onPointer = e => {
+      const r = fallback.getBoundingClientRect();
+      const x = clamp((e.clientX - (r.left + r.width * 0.5)) / (r.width * 0.9), -1, 1);
+      const y = clamp((e.clientY - (r.top + r.height * 0.25)) / (r.height * 0.6), -1, 1);
+      fallback.style.transform = 'perspective(900px) rotateY(' + f(x * 8) + 'deg) rotateX(' + f(-y * 6) + 'deg)';
+    };
+    window.addEventListener('pointermove', onPointer, { passive: true });
+  }
+  if (!gl) setupFallback();
+
+  if (!reduceMotion) {
+    window.addEventListener('pointermove', e => { if (onPointer && gl && canvas.classList.contains('ready')) onPointer(e); }, { passive: true });
+    window.addEventListener('pointerleave', () => { if (gl) { /* idle drift takes over */ } });
+    canvas.addEventListener('click', () => { if (onClick) onClick(); });
+    canvas.addEventListener('pointerenter', () => { if (finePointer) say('Hi there!'); });
+  }
 })();
 
 // ---- About: 360 degree ring ------------------------------------------
