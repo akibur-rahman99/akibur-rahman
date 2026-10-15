@@ -216,7 +216,7 @@ const clamp = (v, a, b) => Math.min(b, Math.max(a, v));
     ['.section-head', false, 0], ['.dossier', false, 0], ['.t-item', false, 0],
     ['.poster', true], ['.moment', true], ['.links li', true],
     ['.resume-head', false, 0], ['.resume-contact', false, 1], ['.resume-block', false, 0],
-    ['.ring-scene', false, 0], ['.ring-controls', false, 2], ['.avatar-stage', false, 1]
+    ['.ring-scene', false, 0], ['.ring-controls', false, 2], ['.contact-grid .avatar-stage', false, 1]
   ];
   items.forEach(([sel, stagger, fixed]) => {
     document.querySelectorAll(sel).forEach(el => {
@@ -302,9 +302,7 @@ if (!reduceMotion && finePointer) {
 // ---- Contact avatar: 2.5D parallax portrait (WebGL) -----------------------
 // Depth map makes the head turn toward the pointer, eyes follow it,
 // plus a spotlight that tracks the cursor, a light sweep and a glint on the glasses.
-(() => {
-  const canvas = document.querySelector('.avatar-canvas');
-  if (!canvas) return;
+document.querySelectorAll('.avatar-canvas').forEach(canvas => {
   const stage = canvas.closest('.avatar-stage');
   const fallback = stage.querySelector('.avatar-fallback');
   const bubble = stage.querySelector('.avatar-bubble');
@@ -520,7 +518,7 @@ void main(){
     canvas.addEventListener('click', () => { if (onClick) onClick(); });
     canvas.addEventListener('pointerenter', () => { if (finePointer) say('Hi there!'); });
   }
-})();
+});
 
 // ---- About: 360 degree ring ------------------------------------------
 (() => {
