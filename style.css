@@ -830,3 +830,4 @@ a.tile:hover .tile-icon, a.tile:focus-visible .tile-icon{scale:1.1; background:v
 .cert-body .moment-sub:last-of-type{margin-bottom:10px}
 @media (prefers-reduced-motion: reduce){.cert,.cert-img img{transition:none}.cert:hover{transform:none}.cert:hover .cert-img img{transform:none}}
 .certs:has(> .cert:only-child){grid-template-columns:minmax(0, 620px)}
+.cert-img img{aspect-ratio:1754 / 1241; object-fit:contain}
