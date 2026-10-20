@@ -787,3 +787,18 @@ void main(){
   render();
   requestAnimationFrame(tick);
 })();
+
+/* ---------- Copy-to-clipboard links (Discord username) ---------- */
+document.querySelectorAll('[data-copy]').forEach((a) => {
+  a.addEventListener('click', (e) => {
+    if (!navigator.clipboard) return; // fall back to opening the link
+    e.preventDefault();
+    const span = a.querySelector('span');
+    const text = a.dataset.copy;
+    navigator.clipboard.writeText(text).then(() => {
+      if (!span) return;
+      span.textContent = 'Copied: ' + text;
+      setTimeout(() => { span.textContent = text; }, 1800);
+    }).catch(() => { window.open(a.href, '_blank', 'noreferrer'); });
+  });
+});
